@@ -1,0 +1,140 @@
+{% load tailwind_tags %}
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    {% tailwind_css %}
+
+    <link rel="stylesheet" type="text/css" href="{% static 'css/index.css' %}">
+
+    <title>FindAHome -{%block title %} {%endblock%}</title>
+
+</head>
+<body class="relative">
+  <div class="alerts-container fixed top-8 z-50 w-full flex justify-center">
+
+  <div class="alerts" id="alerts">
+    {% for message in messages %} 
+      {% if message.tags %}
+        <div role="alert" class="alert alert-{{ message.tags }}">
+          {{ message }}
+
+          <button class="close-btn" type="button">x</button>
+        </div>
+      {% else %}
+        <div role="alert" class="alert alert-default">
+          {{ message }}
+
+          <button class="close-btn" type="button">x</button>
+        </div>
+      {% endif %} 
+    {% endfor %}
+  </div>
+</div>
+
+    <header class="header bg-white h-14 flex items-center justify-between container shadow fixed top-0 left-0 right-0 z-40 px-4">
+    <a href="{% url 'properties:home' %}" class="logo font-sans text-primary font-bold text-2xl">
+         findAhome<span class="text-rose-600">.com</span> </a>
+
+      <div class="links flex items-center gap-x-4">
+        {% if user.is_authenticated %}
+       <!-- <a href="" class="text-primary">
+            My Reservations
+          </a>-->
+          <div id="profile-container" class="profile-container relative text-gray-800">
+            <button role="button" id="profile-btn" class="flex items-center gap-x-2">
+              <img src="{{ user.profile_pic.url }}" alt="profile" class="profile w-7 h-7 rounded-full">
+              <div class="info flex flex-col items-start">
+                <span class="font-semibold text-sm">{{ user.first_name }} {{ user.last_name }}</span>
+              </div>
+              <div>
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-3 h-3">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
+                </svg>
+              </div>
+            </button>
+
+            <ul style="display: none;" id="profile-dropdown" class="dropdown shadow rounded absolute top-12 right-0 bg-white w-44 z-40 flex-col">
+             <li>
+                <a class="text-gray-700 rounded-t px-4 py-2 border-b w-full hover:bg-gray-200 flex items-center gap-x-2" href="{% url 'properties:wishlist' %}">
+                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12z" />
+                  </svg>                  
+                  Whishtlist
+                </a>
+              </li>
+              <li>
+                <a class="text-gray-700 rounded-b px-4 py-2 w-full hover:bg-gray-200 flex items-center gap-x-2" href="">
+                  <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path></svg>        
+                  Profile
+                </a>
+              </li> 
+              <li>
+                <a class="text-gray-700 rounded-b px-4 py-2 w-full hover:bg-gray-200 flex items-center gap-x-2" href="{% url 'logout' %}">
+                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 9V5.25A2.25 2.25 0 0013.5 3h-6a2.25 2.25 0 00-2.25 2.25v13.5A2.25 2.25 0 007.5 21h6a2.25 2.25 0 002.25-2.25V15M12 9l-3 3m0 0l3 3m-3-3h12.75" />
+                  </svg>           
+                  Logout
+                </a>
+              </li> 
+            </ul>
+          </div>
+        {% else %}
+        <a href="{% url 'signup' %}" class="btn btn-primary">Sign Up</a>
+        <a href="{% url 'login' %}" class="btn text-primary">Login</a>
+        {% endif %}
+      </div>
+    </header>
+    <main class="content mt-14" style="min-height: 100vh;">
+        {% block content %}{% endblock %}
+    </main>
+        
+<footer class="footer mt-16 bg-black text-gray-200 w-full container py-4 text-sm px-4">
+@ 2022 findAhome Inc.
+</footer>
+</body>
+
+<script type="text/javascript">
+  function getCookie(name) {
+    let cookieValue = null;
+    if (document.cookie && document.cookie !== '') {
+        const cookies = document.cookie.split(';');
+        for (let i = 0; i < cookies.length; i++) {
+            const cookie = cookies[i].trim();
+            // Does this cookie string begin with the name we want?
+            if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
+    }
+  var allCloseBtns = document.querySelectorAll(".close-btn");
+  
+  var profileBtn = document.getElementById('profile-btn')
+  var profileDropdown = document.getElementById('profile-dropdown')
+
+  if (profileBtn) {
+    profileBtn.addEventListener('click', () => {
+      if (profileDropdown.classList.contains('visible')) {
+        profileDropdown.classList.remove('visible')
+        profileDropdown.style.display = 'none';
+      } else {
+        profileDropdown.classList.add('visible')
+        profileDropdown.style.display = 'flex';
+      }
+    })
+  }
+ 
+</script>
+{% block script %}{% endblock %}
+</body>
+</html>

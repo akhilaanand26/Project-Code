@@ -1,0 +1,2 @@
+TENANT = "TENANT"
+OWNER = "OWNER"

@@ -1,0 +1,40 @@
+{% extends "base_auth.html" %}
+{% block content %}
+<div class="container">
+    <form class="form"  method ="POST" id ="form">
+        {% csrf_token %}
+        <h4>Forget Paasword</h4>
+
+        {% if messages %}
+    
+        {% for message in messages %}
+        <div class ="alert alert-info">
+            {{message}}
+        </div>
+        {% endfor %}
+        {% endif %}
+
+        
+        <div class="form-control block
+        w-full
+        px-3
+        py-1.5
+        text-base
+        font-normal
+        text-gray-700
+        bg-white bg-clip-padding
+        border border-solid border-gray-300
+        rounded
+        transition
+        ease-in-out
+        m-0
+        focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none">
+        <div class="form-group">
+            <label for="password">Email</label>
+            <input type="text" name="email" class="form-control">
+         <button class ="btn btn-primary" type="submit">Submit</button>
+
+        </form>
+    </div>
+</div>
+{% endblock%}

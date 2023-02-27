@@ -1,0 +1,200 @@
+{% extends 'base_owner.html' %}
+{% load static %}
+
+{% block title %}Find your sweet home{% endblock %}
+
+{% block tags %}{% endblock %}
+
+{% block content %}
+    <div class="properties-page">
+        <h1 class="text-2xl font-bold mb-6">Add Property</h1>
+
+        <form  method="POST" enctype="multipart/form-data" action="" >
+            {% csrf_token %}
+            
+            {{ form.non_field_errors }}
+
+            <div class="form-group title {% if form.title.errors %}error{% endif %}">
+                <label for="{{ form.title.id_for_label }}">
+                    {{ form.title.label }}
+                </label>
+                {{ form.title }}
+                
+                {{ form.title.errors }}
+            </div>
+            <div class="form-group description {% if form.description.errors %}error{% endif %}">
+                <label for="{{ form.description.id_for_label }}">
+                    {{ form.description.label }}
+                </label>
+                {{ form.description }}
+                
+                {{ form.description.errors }}
+            </div>
+
+            <div class="other-attributes mb-4">
+                <h3 class="font-semibold text-gray-900 text-lg mt-4 mb-2">Other Attributes</h3>
+
+                <div class="fields grid grid-cols-2 gap-4">
+                    <div class="form-group no_of_floors {% if form.no_of_floors.errors %}error{% endif %}">
+                        <label for="{{ form.no_of_floors.id_for_label }}">
+                            {{ form.no_of_floors.label }}
+                        </label>
+                        {{ form.no_of_floors }}
+                        
+                        {{ form.no_of_floors.errors }}
+                    </div>
+                    <div class="form-group no_of_bathrooms {% if form.no_of_bathrooms.errors %}error{% endif %}">
+                        <label for="{{ form.no_of_bathrooms.id_for_label }}">
+                            {{ form.no_of_bathrooms.label }}
+                        </label>
+                        {{ form.no_of_bathrooms }}
+                        
+                        {{ form.no_of_bathrooms.errors }}
+                    </div>
+                    <div class="form-group no_of_bedrooms {% if form.no_of_bedrooms.errors %}error{% endif %}">
+                        <label for="{{ form.no_of_bedrooms.id_for_label }}">
+                            {{ form.no_of_bedrooms.label }}
+                        </label>
+                        {{ form.no_of_bedrooms }}
+                        
+                        {{ form.no_of_bedrooms.errors }}
+                    </div>
+                    <div class="form-group no_of_bathrooms_inside {% if form.no_of_bathrooms_inside.errors %}error{% endif %}">
+                        <label for="{{ form.no_of_bathrooms_inside.id_for_label }}">
+                            {{ form.no_of_bathrooms_inside.label }}
+                        </label>
+                        {{ form.no_of_bathrooms_inside }}
+                        
+                        {{ form.no_of_bathrooms_inside.errors }}
+                    </div>
+                    <div class="form-group no_of_bathrooms_outside {% if form.no_of_bathrooms_outside.errors %}error{% endif %}">
+                        <label for="{{ form.no_of_bathrooms_outside.id_for_label }}">
+                            {{ form.no_of_bathrooms_outside.label }}
+                        </label>
+                        {{ form.no_of_bathrooms_outside }}
+                        
+                        {{ form.no_of_bathrooms_outside.errors }}
+                    </div>
+                    <div class="form-group master_bedroon {% if form.master_bedroon.errors %}error{% endif %}">
+                        <label for="{{ form.master_bedroon.id_for_label }}">
+                            {{ form.master_bedroon.label }}
+                        </label>
+                        {{ form.master_bedroon}}
+                        
+                        {{ form.master_bedroon.errors }}
+                    </div>
+                    <div class="form-group no_of_livingrooms {% if form.no_of_livingrooms.errors %}error{% endif %}">
+                        <label for="{{ form.no_of_livingrooms.id_for_label }}">
+                            {{ form.no_of_livingrooms.label }}
+                        </label>
+                        {{ form.no_of_livingrooms }}
+                        
+                        {{ form.no_of_livingrooms.errors }}
+                    </div>
+                    <div class="form-group dining_hall {% if form.dining_hall.errors %}error{% endif %}">
+                        <label for="{{ form.dining_hall.id_for_label }}">
+                            {{ form.dining_hall.label }}
+                        </label>
+                        {{ form.dining_hall }}
+                        
+                        {{ form.dining_hall.errors }}
+                    </div>
+                    <div class="form-group kitchen {% if form.kitchen.errors %}error{% endif %}">
+                        <label for="{{ form.kitchen.id_for_label }}">{{ form.kitchen.label }}</label>
+                        {{ form.kitchen }}
+                        
+                        {{ form.kitchen.errors }}
+                    </div>
+        
+                    <div class="form-group plot_area {% if form.plot_area.errors %}error{% endif %}">
+                        <label for="{{ form.plot_area.id_for_label }}">{{ form.plot_area.label }}</label>
+                        {{ form.plot_area }}
+                        
+                        {{ form.plot_area.errors }}
+                    </div>
+                    <div class="form-group rate {% if form.rate.errors %}error{% endif %}">
+                        <label for="{{ form.rate.id_for_label }}">{{ form.rate.label }}</label>
+                        {{ form.rate }}
+                        
+                        {{ form.rate.errors }}
+                    </div>
+                </div>
+            </div>
+
+            <div class="additional-attributes mb-4">
+                <h3 class="font-semibold text-gray-900 text-lg mt-4 mb-2">Additional Attributes</h3>
+
+                <div class="form-group address_1 {% if form.address_1.errors %}error{% endif %}">
+                    <label for="{{ form.address_1.id_for_label }}">{{ form.address_1.label }}</label>
+                    {{ form.address_1 }}
+                    
+                    {{ form.address_1.errors }}
+                </div>
+                <div class="form-group city {% if form.city.errors %}error{% endif %}">
+                    <label for="{{ form.city.id_for_label }}">{{ form.city.label }}</label>
+                    {{ form.city }}
+                    
+                    {{ form.city.errors }}
+                </div>
+                <div class="form-group district {% if form.district.errors %}error{% endif %}">
+                    <label for="{{ form.district.id_for_label }}">{{ form.district.label }}</label>
+                    {{ form.district }}
+                    
+                    {{ form.district.errors }}
+                </div>
+                <div class="form-group zip_code {% if form.zip_code.errors %}error{% endif %}">
+                    <label for="{{ form.zip_code.id_for_label }}">{{ form.zip_code.label }}</label>
+                    {{ form.zip_code }}
+                    
+                    {{ form.zip_code.errors }}
+                </div>
+                <div class="form-group feature_1 {% if form.feature_1.errors %}error{% endif %}">
+                    <label for="{{ form.feature_1.id_for_label }}">{{ form.feature_1.label }}</label>
+                    {{ form.feature_1 }}
+                    
+                    {{ form.feature_1.errors }}
+                </div>
+                <div class="form-group feature_2 {% if form.feature_2.errors %}error{% endif %}">
+                    <label for="{{ form.feature_2.id_for_label }}">{{ form.feature_2.label }}</label>
+                    {{ form.feature_2 }}
+                    
+                    {{ form.feature_2.errors }}
+                </div>
+               
+               
+
+                <div class="fields flex gap-x-4 mt-4">
+                    <div class="flex items-center gap-x-2 has_watersupply {% if form.has_watersupply.errors %}error{% endif %}">
+                        <label class="text-sm font-medium text-gray-700" for="{{ form.has_watersupply.id_for_label }}">{{ form.has_watersupply.label }}</label>
+                        {{ form.has_watersupply }}
+                        
+                        {{ form.has_watersupply.errors }}
+                    </div>
+                    <div class="flex items-center gap-x-2 has_electricity {% if form.has_electricity.errors %}error{% endif %}">
+                        <label class="text-sm font-medium text-gray-700" for="{{ form.has_electricity.id_for_label }}">{{ form.has_electricity.label }}</label>
+                        {{ form.has_electricity }}
+                        
+                        {{ form.has_electricity.errors }}
+                    </div>
+                    <div class="flex items-center gap-x-2 is_occupied {% if form.is_occupied.errors %}error{% endif %}">
+                        <label class="text-sm font-medium text-gray-700" for="{{ form.is_occupied.id_for_label }}">{{ form.is_occupied.label }}</label>
+                        {{ form.is_occupied }}
+                        
+                        {{ form.is_occupied.errors }}
+                    </div>
+                </div>
+            </div>
+
+            <div id="common-error" class="text-sm mt-4 mb-2 text-red-500">
+            </div>
+            <div class="form-group image {% if image_form.image.errors %}error{% endif %}">
+                <label for="{{ image_form.image.id_for_label }}">{{ image_form.image.label }}</label>
+                {{ image_form.image }}
+                
+                {{ image_form.image.errors }}
+            </div>
+
+            <button type="submit" class="btn btn-primary w-full font-bold mt-8 mb-4">Add Property</button>
+        </form>
+    </div>
+{% endblock %}

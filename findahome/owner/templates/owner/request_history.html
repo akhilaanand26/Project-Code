@@ -1,0 +1,52 @@
+{% extends 'base_owner.html' %}
+{% load static %}
+
+{% block title %}Find your sweet home{% endblock %}
+
+{% block tags %}{% endblock %}
+
+{% block content %}
+<div>
+    <h1 class="text-2xl font-bold mb-6"> Request History</h1>
+</div>
+<div class="flex flex-col">
+  <div class="overflow-x-auto sm:-mx-6 lg:-mx-8">
+    <div class="py-4 inline-block min-w-full sm:px-6 lg:px-8">
+      <div class="overflow-hidden">
+        <table class="min-w-full text-center">
+          <thead class="border-b bg-gray-800">
+           
+              <th scope="col" class="text-sm font-medium text-white px-6 py-4">
+               User
+              </th>
+              <th scope="col" class="text-sm font-medium text-white px-6 py-4">
+                Property
+              </th>
+              
+              <th scope="col" class="text-sm font-medium text-white px-6 py-4">
+               Status
+              </th>
+              </thead>
+              <tbody>
+                
+                {% for r in reservations %}
+                         <tr class="bg-white border-b">
+                           <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900"> {{r.user_id.first_name}} {{r.user_id.last_name}}</td>
+                         </td>
+                           
+                           <td class="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">
+                             {{r.property_id.title}}
+                           </td>
+                          </td>
+                        
+                          <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{{r.status}}</td>  
+                        </td>
+                      </tr>
+                      {% endfor %}
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</div>            
+{% endblock %}

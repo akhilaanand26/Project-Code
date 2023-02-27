@@ -1,0 +1,71 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Wishlist{% endblock %}
+
+{% block content %}
+<main class="wishlist-properties grid grid-cols-1 md:grid-cols-4 gap-6">
+    {% if wishlist_properties %}
+        {% for w in wishlist_properties %}
+            <a href="{% url 'properties:property_details' propertydetails_id=w.property_id.id%} " class="property-card rounded-xl" style="height: 360px;">
+                <div class="top border-b">
+                    <div class="img relative">
+                        {% if w.property_id.propertyimages_set.first %}
+                            <img class="h-60 rounded-xl w-full object-cover" src="{{ w.property_id.propertyimages_set.first.image.url }}" alt="property">
+                        {% else %}
+                            <!-- fallback image -->
+                            <img class="h-60 rounded-xl w-full object-cover" src="{% static 'img/fallback.png' %}" alt="fallback">
+                        {% endif %}
+                       
+                    </div>
+                    <div class="infos px-2 py-2 flex items-center justify-between">
+                        <div class="left leading-tight">
+                            <h3 class="text-base text-gray-900 font-semibold">{{ w.property_id.title }}</h3>
+                            <div class="text-xs text-gray-700 flex items-center gap-x-1">
+                             {{ w.property_id.district.name }}
+                            </div>
+                        </div>
+                        <div class="right text-gray-900 text-lg font-semibold">
+                            ₹ {{ w.property_id.rate }}
+                        </div>
+                    </div>
+                </div>
+                <div class="extras px-2 py-2 flex items-center justify-between text-gray-800">
+                    <div class="flex-1 flex items-center justify-between gap-x-2">
+                        <div class="floors text-center">
+                            <div class="top flex items-center justify-center gap-x-1">
+                                <svg class="fill-gray-800" xmlns="http://www.w3.org/2000/svg" enable-background="new 0 0 24 24" height="16" viewBox="0 0 24 24" width="24"><rect fill="none" height="24" width="16"/><path d="M12,7V3H2v18h20V7H12z M10,19H4v-2h6V19z M10,15H4v-2h6V15z M10,11H4V9h6V11z M10,7H4V5h6V7z M20,19h-8V9h8V19z M18,11h-4v2 h4V11z M18,15h-4v2h4V15z"/></svg>
+                                  <span class="" style="line-height: 0; font-size: 14px;">{{ w.property_id.no_of_floors }}</span>
+                            </div>
+                            <span class="" style="line-height: 0; font-size: 12px;">Floors</span>                               
+                        </div>
+                        <div class="bedrooms text-center">
+                            <div class="top flex items-center justify-center gap-x-1">
+                                <svg class="fill-gray-800" xmlns="http://www.w3.org/2000/svg" enable-background="new 0 0 24 24" height="16" viewBox="0 0 24 24" width="16"><g><path d="M0,0h24v24H0V0z" fill="none"/></g><g><path d="M21,10.78V8c0-1.65-1.35-3-3-3h-4c-0.77,0-1.47,0.3-2,0.78C11.47,5.3,10.77,5,10,5H6C4.35,5,3,6.35,3,8v2.78 C2.39,11.33,2,12.12,2,13v6h2v-2h16v2h2v-6C22,12.12,21.61,11.33,21,10.78z M14,7h4c0.55,0,1,0.45,1,1v2h-6V8C13,7.45,13.45,7,14,7 z M5,8c0-0.55,0.45-1,1-1h4c0.55,0,1,0.45,1,1v2H5V8z M4,15v-2c0-0.55,0.45-1,1-1h14c0.55,0,1,0.45,1,1v2H4z"/></g></svg>
+                                  <span class="" style="line-height: 0; font-size: 14px;">{{ w.property_id.no_of_bedrooms }}</span>
+                            </div>
+                            <span class="" style="line-height: 0; font-size: 12px;">Bedrooms</span>                               
+                        </div>
+                        <div class="bathrooms text-center">
+                            <div class="top flex items-center justify-center gap-x-1">
+                                <svg class="fill-gray-700" xmlns="http://www.w3.org/2000/svg" enable-background="new 0 0 24 24" height="16" viewBox="0 0 24 24" width="16"><g><path d="M0,0h24v24H0V0z" fill="none"/></g><g><circle cx="8" cy="17" r="1"/><circle cx="12" cy="17" r="1"/><circle cx="16" cy="17" r="1"/><path d="M13,5.08V3h-2v2.08C7.61,5.57,5,8.47,5,12v2h14v-2C19,8.47,16.39,5.57,13,5.08z"/><circle cx="8" cy="20" r="1"/><circle cx="12" cy="20" r="1"/><circle cx="16" cy="20" r="1"/></g></svg>
+                                  <span class="" style="line-height: 0; font-size: 14px;">{{ w.property_id.no_of_bathrooms }}</span>
+                            </div>
+                            <span class="" style="line-height: 0; font-size: 12px;">Bathrooms</span>                               
+                        </div>
+                        <div class="plot-area text-center">
+                            <div class="top flex items-center justify-center gap-x-1">
+                                <svg class="fill-gray-800" xmlns="http://www.w3.org/2000/svg" height="16" viewBox="0 0 24 24" width="16"><path d="M0 0h24v24H0z" fill="none"/><path d="M17 15h2V7c0-1.1-.9-2-2-2H9v2h8v8zM7 17V1H5v4H1v2h4v10c0 1.1.9 2 2 2h10v4h2v-4h4v-2H7z"/></svg>
+                                  <span class="" style="line-height: 0; font-size: 14px;">{{ w.property_id.plot_area }} sqft</span>
+                            </div>
+                            <span class="" style="line-height: 0; font-size: 12px;">Area</span>                               
+                        </div>
+                    </div>
+                </div>
+            </a>
+            {%endfor%}
+            {% else %}
+            <div><h1>ITEM NOT FOUND</h1></div>
+            {%endif%}
+            
+{% endblock %}

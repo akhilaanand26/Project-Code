@@ -1,0 +1,145 @@
+{% load tailwind_tags %}
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, shrink-to-fit=no"
+    />
+
+    {% tailwind_css %}
+
+    <title>FindAHome - {% block title %}{% endblock %}</title>
+
+    
+    <link rel="stylesheet" type="text/css" href="{% static 'css/index.css' %}"> 
+   
+    {% block tags %}{% endblock %}
+  </head>
+  <body class="relative">
+      <div class="alerts-container fixed top-8 z-50 w-full flex justify-center"
+      >
+        <div class="alerts" id="alerts">
+          {% for message in messages %} 
+            {% if message.tags %}
+              <div role="alert" class="alert alert-{{ message.tags }}">
+                {{ message }}
+
+                <button class="close-btn" type="button">x</button>
+              </div>
+            {% else %}
+              <div role="alert" class="alert alert-default">
+                {{ message }}
+
+                <button class="close-btn" type="button">x</button>
+              </div>
+            {% endif %} 
+          {% endfor %}
+        </div>
+      </div>
+
+    <header class="header bg-white h-14 flex items-center justify-between container shadow fixed top-0 left-0 right-0 z-40">
+      <a href="{% url 'properties:home' %}" class="logo font-sans text-primary font-bold text-2xl flex items-center gap-x-1">
+        
+      </a>
+
+      <div class="links flex items-center gap-x-4">
+          <div id="profile-container" class="profile-container relative text-gray-800">
+            <button role="button" id="profile-btn" class="flex items-center gap-x-2">
+              <img src="{{ user.profile_pic.url }}" alt="profile" class="profile w-7 h-7 rounded-full">
+              <div class="info flex flex-col items-start">
+                <span class="font-semibold text-sm">{{ user.first_name }} {{ user.last_name }}</span>
+              </div>
+              <div>
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-3 h-3">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
+                </svg>
+              </div>
+            </button>
+
+            <ul style="display: none;" id="profile-dropdown" class="dropdown shadow rounded absolute top-12 right-0 bg-white w-44 z-40 flex-col">
+              <li>
+                <a class="text-gray-700 rounded px-4 py-2 w-full hover:bg-gray-200 flex items-center gap-x-2" href="{% url 'logout' %}">
+                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 9V5.25A2.25 2.25 0 0013.5 3h-6a2.25 2.25 0 00-2.25 2.25v13.5A2.25 2.25 0 007.5 21h6a2.25 2.25 0 002.25-2.25V15M12 9l-3 3m0 0l3 3m-3-3h12.75" />
+                  </svg>           
+                  Logout
+                </a>
+              </li>
+            </ul>
+          </div>
+      </div>
+    </header>
+
+    <div class="left flex">
+        <aside class="owner-sidebar fixed top-14 left-0 bottom-0 bg-gray-900 w-56 pt-4 flex flex-col overflow-y-auto z-30">
+            <nav class="h-full w-full">
+                <ul class="invisible-scrollbar h-full w-full max-h-full overflow-y-auto flex flex-col">
+                    {% url 'owner:properties' as owner_properties %}
+                    <li>
+                       <a href="{% url 'owner:properties' %}" class="owner-sidebar-item {% if request.path == owner_properties %}active{% endif %}">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M19.006 3.705a.75.75 0 00-.512-1.41L6 6.838V3a.75.75 0 00-.75-.75h-1.5A.75.75 0 003 3v4.93l-1.006.365a.75.75 0 00.512 1.41l16.5-6z" />
+                            <path fill-rule="evenodd" d="M3.019 11.115L18 5.667V9.09l4.006 1.456a.75.75 0 11-.512 1.41l-.494-.18v8.475h.75a.75.75 0 010 1.5H2.25a.75.75 0 010-1.5H3v-9.129l.019-.006zM18 20.25v-9.565l1.5.545v9.02H18zm-9-6a.75.75 0 00-.75.75v4.5c0 .414.336.75.75.75h3a.75.75 0 00.75-.75V15a.75.75 0 00-.75-.75H9z" clip-rule="evenodd" />
+                          </svg>
+                          <span class="">Properties</span>
+                       </a>
+                    </li>
+
+                    <li>
+                      <a href="{% url 'owner:request' %}" class="owner-sidebar-item {% if request.path == owner_request %}active{% endif %}">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                          <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 13.5h3.86a2.25 2.25 0 012.012 1.244l.256.512a2.25 2.25 0 002.013 1.244h3.218a2.25 2.25 0 002.013-1.244l.256-.512a2.25 2.25 0 012.013-1.244h3.859m-19.5.338V18a2.25 2.25 0 002.25 2.25h15A2.25 2.25 0 0021.75 18v-4.162c0-.224-.034-.447-.1-.661L19.24 5.338a2.25 2.25 0 00-2.15-1.588H6.911a2.25 2.25 0 00-2.15 1.588L2.35 13.177a2.25 2.25 0 00-.1.661z" />
+                        </svg>
+                        
+                         <span class=""> Pending Request</span>
+                      </a>
+                   </li>
+                    
+                   <li>
+                    <a href="{% url 'owner:pending_request' %}" class="owner-sidebar-item {% if request.path == owner_pending_Request %}active{% endif %}">
+                      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 13.5h3.86a2.25 2.25 0 012.012 1.244l.256.512a2.25 2.25 0 002.013 1.244h3.218a2.25 2.25 0 002.013-1.244l.256-.512a2.25 2.25 0 012.013-1.244h3.859m-19.5.338V18a2.25 2.25 0 002.25 2.25h15A2.25 2.25 0 0021.75 18v-4.162c0-.224-.034-.447-.1-.661L19.24 5.338a2.25 2.25 0 00-2.15-1.588H6.911a2.25 2.25 0 00-2.15 1.588L2.35 13.177a2.25 2.25 0 00-.1.661z" />
+                      </svg>
+                      
+                       <span class="">Request History</span>
+                    </a>
+                 </li>
+                 </ul>
+            </nav>
+        </aside>
+        <main class="content mt-14 flex-1 ml-56 px-8 pt-10" style="min-height: 100vh;">
+            {% block content %}{% endblock %}
+        </main>
+    </div>
+
+    <footer class="footer mt-16 bg-black text-gray-200 ml-56 w-full container py-4 text-sm">
+      &copy; 2022 findAhome Inc.
+    </footer>
+    <script type="text/javascript">
+      var allCloseBtns = document.querySelectorAll(".close-btn");
+    
+     
+      var profileBtn = document.getElementById('profile-btn')
+      var profileDropdown = document.getElementById('profile-dropdown')
+    
+      if (profileBtn) {
+        profileBtn.addEventListener('click', () => {
+          if (profileDropdown.classList.contains('visible')) {
+            profileDropdown.classList.remove('visible')
+            profileDropdown.style.display = 'none';
+          } else {
+            profileDropdown.classList.add('visible')
+            profileDropdown.style.display = 'flex';
+          }
+        })
+      }
+    </script>
+    {% block script %}{% endblock %}
+  </body>
+</html>
+

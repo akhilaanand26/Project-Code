@@ -1,0 +1,21 @@
+{% extends 'base_owner.html' %}
+{% load static %}
+
+{% block title %}Find your sweet home{% endblock %}
+
+{% block tags %}{% endblock %}
+
+{% block content %}
+    <div class="properties-page">
+        <h1 class="text-2xl font-bold mb-6">Delete Property</h1>
+        <p>Are you sure you want to delete this Property?</p>
+        <form method="POST" class="form w-full">
+            {% csrf_token %}
+            
+            <div class="buttons mt-2 w-64 flex items-center gap-x-4">
+                <a href="{% url 'owner:properties' %}" class="btn btn-gray text-center w-full font-bold mt-8 mb-4">Go Back</a>
+                <button type="submit" class="btn btn-primary w-full font-bold mt-8 mb-4">Delete</button>
+            </div>
+        </form>
+    </div>
+{% endblock %}

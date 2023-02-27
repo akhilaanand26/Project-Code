@@ -1,0 +1,41 @@
+{% extends "base_auth.html" %}
+
+{% block title %}Login{% endblock %}
+
+{% block content %}
+    <div class="bg-white shadow">
+        <div style="width: 390px;" class="flex flex-col items-center justify-center gap-y-4 px-6 py-4">
+            <h1 class="mb-4 font-bold text-3xl text-center">Login</h1>
+            <form method="POST" novalidate class="w-full">
+              {% csrf_token %}
+
+              <div class="form-group {% if form.email.errors %}error{% endif %}">
+                <label for="{{ form.email.id_for_label }}">{{ form.email.label }}</label>
+                {{ form.email }}
+                
+                {{ form.email.errors }}
+            </div>
+
+            <div class="form-group {% if form.password.errors %}error{% endif %}">
+                <label for="{{ form.password.id_for_label }}">{{ form.password.label }}</label>
+                {{ form.password }}
+                
+                {{ form.password.errors }}
+            </div>
+                <div class="text-center pt-1 mb-12 pb-1">
+                  
+                    
+                <button type="submit" class="btn btn-primary w-full font-bold mt-4 mb-4">Login</button>
+              </form>
+  
+              <a href= "{% url 'forgetpswd' %}"class="text-sm">Forgot Password?</a>
+  
+              <p class="text-sm text-gray-500">Don't have an account?
+                  <a href="{% url 'signup' %}" class="font-bold">Signup</a>
+              </p>
+          </div>
+      </div>
+  {% endblock %}
+                
+                
+               

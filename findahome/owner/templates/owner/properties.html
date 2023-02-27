@@ -1,0 +1,93 @@
+{% extends 'base_owner.html' %}
+{% load static %}
+
+{% block title %}Find your sweet home{% endblock %}
+
+{% block tags %}{% endblock %}
+
+{% block content %}
+    <div class="properties-page">
+        <h1 class="text-2xl font-bold mb-6">All Properties</h1>
+        <div class="top flex items-center justify-end gap-x-2 mb-4">
+            <a href="{% url 'owner:add_property' %}"  class="btn btn-success flex items-center gap-x-1">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v12m6-6H6" />
+                  </svg>                  
+                Add Property
+                </a>
+        </div>
+        
+        <div class="flex flex-col">
+            <div class="overflow-x-auto sm:-mx-6 lg:-mx-8">
+              <div class="py-4 inline-block min-w-full sm:px-6 lg:px-8">
+                <div class="overflow-hidden">
+                  <table class="min-w-full text-center">
+                    <thead class="border-b bg-gray-800">
+                     
+                        <th scope="col" class="text-sm font-medium text-white px-6 py-4">
+                          Img
+                        </th>
+                        <th scope="col" class="text-sm font-medium text-white px-6 py-4">
+                          Title
+                        </th>
+                        <th scope="col" class="text-sm font-medium text-white px-6 py-4">
+                          City
+                        </th>
+                        <th scope="col" class="text-sm font-medium text-white px-6 py-4">
+                          District
+                        </th>
+                        <th scope="col" class="text-sm font-medium text-white px-6 py-4">
+                            Zip Code
+                          </th>
+                          <th scope="col" class="text-sm font-medium text-white px-6 py-4">
+                            Is Occupied
+                          </th>
+                          <th scope="col" class="text-sm font-medium text-white px-6 py-4">
+                            Actions
+                          </th>
+                        </thead>
+                   
+                    <tbody>
+                      {% for property in properties %}
+                        <tr class="bg-white border-b">
+                          <!--<td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">   {{property.image}}</td>-->
+                          <td>
+                            {% if property.propertyimages_set.first %}
+                                <img class="h-10 w-10 object-cover" src="{{ property.propertyimages_set.first.image.url }}" alt="property">
+                            {% else %}
+                               
+                                <img class="h-10 w-10 object-cover" src="{% static 'img/fallback.png' %}" alt="fallback">
+                            {% endif %}
+                        </td>
+                          
+                          <td class="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">
+                            {{property.title}}
+                          </td>
+                          <td class="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">
+                            {{property.city}}
+                          
+                            </td>
+                            <td class="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">
+                              {{property.district}}
+                            </td>
+                            <td class="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">
+                              {{property.zip_code}}
+                            </td>
+                            <td class="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">
+                              {{property.is_occupied}}
+                          </td>
+                          <td class="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">
+                              <a href="{% url 'owner:update_property' property_id=property.id %}" class="btn btn-success">Edit</a>
+                             
+                              <a href="{% url 'owner:delete_property' property_id=property.id %}" class=" btn btn-danger">Delete</a>    
+                          </td>
+                        
+                          </tr>
+                        {% endfor %}
+                      </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>            
+{% endblock %}

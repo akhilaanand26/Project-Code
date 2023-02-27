@@ -1,0 +1,301 @@
+@import url("https://fonts.googleapis.com/css2?family=Roboto&display=swap");
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --background: #ffffff;
+
+  --primary:#13035a;
+  --primary_black: #191917;
+
+  --robot: "Roboto", sans-serif;
+}
+
+@layer base {
+  * {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box !important;
+
+    /* break word */
+    word-wrap: break-word !important;
+  }
+
+  *::after,
+  *::before {
+    box-sizing: border-box !important;
+  }
+
+  html {
+    font-size: 16px;
+  }
+
+  body {
+    /* accomodate for the scroll-bar too */
+    width: 100%;
+    min-height: 100vh;
+
+    overflow-x: hidden !important;
+    overflow-y: auto;
+
+    background: var(--background);
+    color: var(--primary_black);
+    font-size: 1rem;
+    font-weight: 400;
+
+    font-family: var(--roboto);
+
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  a {
+    @apply text-blue-500;
+  }
+
+  button {
+    outline: none !important;
+    @apply cursor-pointer;
+  }
+
+  input {
+    @apply ring-0 ring-offset-0;
+  }
+
+  input:focus {
+    @apply ring-0 ring-offset-0;
+  }
+
+  input::-webkit-outer-spin-button,
+  input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+
+  /* Firefox */
+  input[type="number"] {
+    -moz-appearance: textfield;
+  }
+
+  /* custom scrollbar */
+  ::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+    @apply bg-gray-200;
+  }
+
+  ::-webkit-scrollbar-track {
+    @apply bg-transparent;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    @apply bg-gray-400 border-2 border-gray-300;
+  }
+}
+
+@layer components {
+  .container {
+    @apply px-6;
+  }
+
+  .invisible-scrollbar {
+    -ms-overflow-style: none; /* for Internet Explorer, Edge */
+    scrollbar-width: none; /* for Firefox */
+    overflow-y: auto;
+  }
+
+  .invisible-scrollbar::-webkit-scrollbar {
+    display: none; /* for Chrome, Safari, and Opera */
+  }
+
+  form .nonfield,
+  form .common-error {
+    @apply flex flex-col gap-y-1 mt-1 bg-red-100 border border-red-500 p-1 rounded text-red-500 mb-4;
+  }
+
+  .form-group {
+    @apply flex flex-col mb-2;
+  }
+
+  .form-group label {
+    @apply block text-sm font-medium text-gray-700;
+  }
+
+  .form-group input,
+  .form-group select {
+    @apply block w-full rounded border-gray-300 ring-0;
+  }
+
+  .form-group input:focus,
+  .form-group select:focus {
+    @apply border-gray-600 ring-0;
+  }
+
+  .form-group.error input,
+  .form-group.error select {
+    @apply border border-red-500;
+  }
+
+  .form-group.error input:focus,
+  .form-group.error select:focus {
+    @apply border-red-500;
+  }
+
+  .form-group .input-num {
+    @apply flex items-center h-10;
+  }
+
+  .form-group .input-num button {
+    @apply px-4 py-2 text-base rounded bg-gray-300 h-full;
+  }
+
+  .form-group .input-num .dec-btn {
+    @apply rounded-r-none;
+  }
+
+  .form-group .input-num .inc-btn {
+    @apply rounded-l-none;
+  }
+
+  .form-group .input-num input {
+    @apply outline-none w-12 rounded-none h-full text-sm;
+  }
+  .form-group .input-num input:focus {
+    @apply outline-none border-gray-300;
+  }
+
+  .form-group input[type="number"]:focus {
+    @apply border-gray-300;
+  }
+
+  .form-group .errorlist {
+    @apply flex flex-col gap-y-1 mt-0;
+  }
+
+  .form-group .errorlist li {
+    @apply block text-red-500 text-sm;
+  }
+
+  .btn {
+    @apply text-white px-3 py-2.5 cursor-pointer text-sm font-semibold disabled:opacity-70 disabled:cursor-not-allowed rounded;
+  }
+
+  .btn-primary {
+    @apply bg-primary;
+  }
+
+  .btn-danger {
+    @apply bg-red-500;
+  }
+
+  .btn-success {
+    @apply bg-green-500;
+  }
+
+  .btn-black {
+    @apply bg-gray-900 text-gray-100;
+  }
+
+  .btn-gray {
+    @apply bg-gray-300 text-gray-700;
+  }
+
+  .btn-submit {
+    @apply bg-primary py-3;
+  }
+
+  .btn-outline-red {
+    @apply border border-red-500 text-red-500;
+  }
+
+  /* alerts */
+  .alerts {
+    @apply flex flex-col gap-y-2;
+  }
+
+  .alerts .alert {
+    @apply w-full max-w-2xl px-4 py-2 border rounded text-left flex items-center justify-between gap-x-4;
+  }
+
+  .alerts .alert.alert-default {
+    @apply bg-gray-100 border-gray-500 text-gray-700;
+  }
+
+  .alerts .alert.alert-success {
+    @apply bg-green-100 border-green-500 text-green-500;
+  }
+
+  .alerts .alert.alert-info {
+    @apply bg-blue-100 border-blue-500 text-blue-500;
+  }
+
+  .alerts .alert.alert-warning {
+    @apply bg-yellow-100 border-yellow-500 text-yellow-500;
+  }
+
+  .alerts .alert.alert-error {
+    @apply bg-red-100 border-red-500 text-red-500;
+  }
+
+  .alerts .alert.alert-debug {
+    @apply bg-orange-100 border-orange-500 text-orange-500;
+  }
+
+  .owner-sidebar .owner-sidebar-item {
+    @apply flex items-center gap-x-2 px-4 py-3 text-base font-normal text-gray-200 hover:bg-blue-500 active:bg-blue-500;
+  }
+  .owner-sidebar .owner-sidebar-item.active {
+    @apply bg-blue-500;
+  }
+  .owner-sidebar .owner-sidebar-item svg {
+    @apply w-5 h-5;
+  }
+
+  .table {
+    @apply w-full text-left border-collapse table-auto max-w-full mt-2 bg-white text-sm;
+  }
+
+  .table thead {
+    @apply w-full font-semibold text-primary_black border-b bg-gray-100;
+  }
+
+  .table thead th {
+    @apply px-4 py-2 m-4 text-left noselect border;
+  }
+
+  .table tbody {
+    @apply text-primary_black;
+  }
+
+  .table tbody tr {
+    @apply border-b;
+  }
+
+  .table tbody tr td {
+    @apply px-4 py-2 border;
+  }
+}
+
+@layer utilities {
+  .noselect {
+    -webkit-touch-callout: none; /* iOS Safari */
+    -webkit-user-select: none; /* Safari */
+    -khtml-user-select: none; /* Konqueror HTML */
+    -moz-user-select: none; /* Old versions of Firefox */
+    -ms-user-select: none; /* Internet Explorer/Edge */
+    user-select: none; /* Non-prefixed version, currently supported by Chrome, Edge, Opera and Firefox */
+  }
+
+  .invisible-scrollbar {
+    -ms-overflow-style: none; /* for Internet Explorer, Edge */
+    scrollbar-width: none; /* for Firefox */
+    overflow-y: auto;
+  }
+
+  .invisible-scrollbar::-webkit-scrollbar {
+    display: none; /* for Chrome, Safari, and Opera */
+  }
+}
+

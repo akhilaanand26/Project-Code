@@ -1,0 +1,382 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Find your sweet home{% endblock %}
+
+
+{% block content %}
+<section class="property-details mb-4 border-b px-8">
+    <div class="top border-b">
+    <div class="img relative">
+        {% if property.propertyimages_set.first %}
+                                <img class="h-70  rounded-xl w-full object-cover" src="{{ property.propertyimages_set.first.image.url }}" alt="property">
+                            {% else %}
+                                <!-- fallback image
+                                <img class="h-10 w-10 object-cover" src="{% static 'img/fallback.png' %}" alt="fallback"> -->
+                            {% endif %}
+      <!-- {% if p.propertyimages_set.first %}
+            <img class="h-60 rounded-xl w-full object-cover" src="{{ p.propertyimages_set.first.image.url }}" alt="property">
+        {% else %}
+            fallback image 
+            <img class="h-60 rounded-xl w-full object-cover" src="{% static 'img/fallback.png' %}" alt="fallback">
+        {% endif %}--> 
+       
+    </div>
+       
+            <!--<img class="h-70 rounded-xl w-full object-cover" src="{% static 'img/fallback.png' %}" alt="fallback">-->
+      
+       
+    
+    <div class="extra-infos  mt-6">
+        <div class="left">
+            <h1 class="text-3xl font-bold">{{ property.title }}</h1>
+            <div class="left text-gray-500 flex items-center gap-x-2 text-sm">
+                    <span class="city">{{ property.city }}</span>
+                    <div>|</div>
+                    <span class="date-posted">Posted on: {{ property.created_at|date:"M d, Y" }}</span>
+            </div>
+        </div>
+        <div class="right text-3xl font-bold">
+            <span class="price">₹ {{ property.rate }}</span>
+        </div>
+    </div>
+</div>
+    </section>  
+    <div class="extra-infos flex items-start justify-between mt-6">
+        <div class="left" style="width: 70%;">
+            <div class="left text-gray-500 flex items-center gap-x-2 text-sm"></div>
+        </div>
+    </div>
+    <!--<section class="features flex gap-x-6 mb-6">
+        <div class="left flex-1">
+            <section class="features pb-6 mb-6 border-b">
+                <h3 class="text-xl font-semibold mb-1">Owner Details</h3>
+                <div class="infos flex items-center justify-between gap-x-4 py-2">
+                    <div class="name flex flex-col items-center">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z" />
+                          </svg>
+                           
+    
+                        <span class="text-sm text-gray-500"> Name</span>
+                    </div>
+                    <div class="bedrooms flex flex-col items-center">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M2 4V18L6.8 14.4C7.14582 14.1396 7.56713 13.9992 8 14H16C17.1046 14 18 13.1046 18 12V4C18 2.89543 17.1046 2 16 2H4C2.89543 2 2 2.89543 2 4ZM4 14V4H16V12H7.334C6.90107 11.9988 6.47964 12.1393 6.134 12.4L4 14Z" fill="#2E3A59"></path>
+                            <path d="M22 22V9C22 7.89543 21.1046 7 20 7V18L17.866 16.4C17.5204 16.1393 17.0989 15.9988 16.666 16H7C7 17.1046 7.89543 18 9 18H16C16.4329 17.9992 16.8542 18.1396 17.2 18.4L22 22Z" fill="#2E3A59"></path>
+                            </svg>
+                            
+            
+                        <span class="text-sm text-gray-500">Address</span>
+                    </div>
+                    <div class="bedrooms flex flex-col items-center">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M12 21C10.7369 19.9226 9.56619 18.7415 8.5 17.469C6.9 15.558 5 12.712 5 9.99999C4.99858 7.16754 6.70425 4.61338 9.32107 3.52939C11.9379 2.44539 14.9501 3.04523 16.952 5.04899C18.2685 6.3596 19.0059 8.14238 19 9.99999C19 12.712 17.1 15.558 15.5 17.469C14.4338 18.7415 13.2631 19.9226 12 21ZM12 6.99999C10.9282 6.99999 9.93782 7.57179 9.40193 8.49999C8.86603 9.42819 8.86603 10.5718 9.40193 11.5C9.93782 12.4282 10.9282 13 12 13C13.6569 13 15 11.6568 15 9.99999C15 8.34313 13.6569 6.99999 12 6.99999Z" fill="#2E3A59"></path>
+                            </svg>
+                            
+            
+                        <span class="text-sm text-gray-500">City</span>
+                    </div>
+                    <div class="bathrooms flex flex-col items-center">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M12 21C10.7369 19.9226 9.56619 18.7415 8.5 17.469C6.9 15.558 5 12.712 5 9.99999C4.99858 7.16754 6.70425 4.61338 9.32107 3.52939C11.9379 2.44539 14.9501 3.04523 16.952 5.04899C18.2685 6.3596 19.0059 8.14238 19 9.99999C19 12.712 17.1 15.558 15.5 17.469C14.4338 18.7415 13.2631 19.9226 12 21ZM12 4.99999C9.23995 5.0033 7.00331 7.23994 7 9.99999C7 11.166 7.527 13.185 10.035 16.186C10.6531 16.924 11.309 17.6297 12 18.3C12.691 17.6304 13.3472 16.9259 13.966 16.189C16.473 13.184 17 11.165 17 9.99999C16.9967 7.23994 14.7601 5.0033 12 4.99999ZM12 13C10.3431 13 9 11.6568 9 9.99999C9 8.34313 10.3431 6.99999 12 6.99999C13.6569 6.99999 15 8.34313 15 9.99999C15 10.7956 14.6839 11.5587 14.1213 12.1213C13.5587 12.6839 12.7957 13 12 13Z" fill="#2E3A59"></path>
+                            </svg>
+                            
+                        <span class="text-sm text-gray-500">District</span>
+                    </div>
+                    <div class="bathrooms flex flex-col items-center">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M12 21C10.7369 19.9226 9.56619 18.7415 8.5 17.469C6.9 15.558 5 12.712 5 9.99999C4.99858 7.16754 6.70425 4.61338 9.32107 3.52939C11.9379 2.44539 14.9501 3.04523 16.952 5.04899C18.2685 6.3596 19.0059 8.14238 19 9.99999C19 12.712 17.1 15.558 15.5 17.469C14.4338 18.7415 13.2631 19.9226 12 21ZM12 6.99999C10.9282 6.99999 9.93782 7.57179 9.40193 8.49999C8.86603 9.42819 8.86603 10.5718 9.40193 11.5C9.93782 12.4282 10.9282 13 12 13C13.6569 13 15 11.6568 15 9.99999C15 8.34313 13.6569 6.99999 12 6.99999Z" fill="#2E3A59"></path>
+                            </svg>
+                            
+                        <span class="text-sm text-gray-500">ZipCode</span>
+                    </div>
+                    <div class="sqft flex flex-col items-center">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 12l8.954-8.955c.44-.439 1.152-.439 1.591 0L21.75 12M4.5 9.75v10.125c0 .621.504 1.125 1.125 1.125H9.75v-4.875c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21h4.125c.621 0 1.125-.504 1.125-1.125V9.75M8.25 21h8.25" />
+                          </svg>
+                          
+            
+                        <span class="text-sm text-gray-500">Feature 1</span>
+                    </div>
+                    <div class="sqft flex flex-col items-center">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 12l8.954-8.955c.44-.439 1.152-.439 1.591 0L21.75 12M4.5 9.75v10.125c0 .621.504 1.125 1.125 1.125H9.75v-4.875c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21h4.125c.621 0 1.125-.504 1.125-1.125V9.75M8.25 21h8.25" />
+                          </svg>
+                          
+                        <span class="text-sm text-gray-500">Feature 2</span>
+                    </div>
+                    
+                </div>
+            </section>-->
+    <section class="features flex gap-x-6 mb-6  px-8">
+        <div class="left flex-1">
+            <section class="features pb-6 mb-6 border-b">
+                <h3 class="text-2xl font-semibold mb-4">Home Features</h3>
+                <div class="infos flex items-center justify-between gap-x-4 py-2">
+                    <div class="floors flex flex-col items-center">
+                        <svg class="fill-gray-800" xmlns="http://www.w3.org/2000/svg" enable-background="new 0 0 24 24" height="28" viewBox="0 0 24 24" width="24"><rect fill="none" height="24" width="16"/><path d="M12,7V3H2v18h20V7H12z M10,19H4v-2h6V19z M10,15H4v-2h6V15z M10,11H4V9h6V11z M10,7H4V5h6V7z M20,19h-8V9h8V19z M18,11h-4v2 h4V11z M18,15h-4v2h4V15z"/></svg>
+            
+                        <span class="text-sm text-gray-500"> {{property.no_of_floors}} Floor</span>
+                    </div>
+                    <div class="bedrooms flex flex-col items-center">
+                        <svg class="fill-gray-800" xmlns="http://www.w3.org/2000/svg" enable-background="new 0 0 24 24" height="28" viewBox="0 0 24 24" width="24"><g><path d="M0,0h24v24H0V0z" fill="none"/></g><g><path d="M21,10.78V8c0-1.65-1.35-3-3-3h-4c-0.77,0-1.47,0.3-2,0.78C11.47,5.3,10.77,5,10,5H6C4.35,5,3,6.35,3,8v2.78 C2.39,11.33,2,12.12,2,13v6h2v-2h16v2h2v-6C22,12.12,21.61,11.33,21,10.78z M14,7h4c0.55,0,1,0.45,1,1v2h-6V8C13,7.45,13.45,7,14,7 z M5,8c0-0.55,0.45-1,1-1h4c0.55,0,1,0.45,1,1v2H5V8z M4,15v-2c0-0.55,0.45-1,1-1h14c0.55,0,1,0.45,1,1v2H4z"/></g></svg>
+            
+                        <span class="text-sm text-gray-500">{{property.master_bedroon}} Master Bedroom</span>
+                    </div>
+                    <div class="bedrooms flex flex-col items-center">
+                        <svg class="fill-gray-800" xmlns="http://www.w3.org/2000/svg" enable-background="new 0 0 24 24" height="28" viewBox="0 0 24 24" width="24"><g><path d="M0,0h24v24H0V0z" fill="none"/></g><g><path d="M21,10.78V8c0-1.65-1.35-3-3-3h-4c-0.77,0-1.47,0.3-2,0.78C11.47,5.3,10.77,5,10,5H6C4.35,5,3,6.35,3,8v2.78 C2.39,11.33,2,12.12,2,13v6h2v-2h16v2h2v-6C22,12.12,21.61,11.33,21,10.78z M14,7h4c0.55,0,1,0.45,1,1v2h-6V8C13,7.45,13.45,7,14,7 z M5,8c0-0.55,0.45-1,1-1h4c0.55,0,1,0.45,1,1v2H5V8z M4,15v-2c0-0.55,0.45-1,1-1h14c0.55,0,1,0.45,1,1v2H4z"/></g></svg>
+            
+                        <span class="text-sm text-gray-500">{{property.no_of_bedrooms}} Bedroom</span>
+                    </div>
+                    <div class="bathrooms flex flex-col items-center">
+                        <svg class="fill-gray-800" xmlns="http://www.w3.org/2000/svg" enable-background="new 0 0 24 24" height="28" viewBox="0 0 24 24" width="24"><g><path d="M0,0h24v24H0V0z" fill="none"/></g><g><circle cx="8" cy="17" r="1"/><circle cx="12" cy="17" r="1"/><circle cx="16" cy="17" r="1"/><path d="M13,5.08V3h-2v2.08C7.61,5.57,5,8.47,5,12v2h14v-2C19,8.47,16.39,5.57,13,5.08z"/><circle cx="8" cy="20" r="1"/><circle cx="12" cy="20" r="1"/><circle cx="16" cy="20" r="1"/></g></svg>
+            
+                        <span class="text-sm text-gray-500">{{property.no_of_bathrooms_inside}} Bathrooms(Inside)</span>
+                    </div>
+                    <div class="bathrooms flex flex-col items-center">
+                        <svg class="fill-gray-800" xmlns="http://www.w3.org/2000/svg" enable-background="new 0 0 24 24" height="28" viewBox="0 0 24 24" width="24"><g><path d="M0,0h24v24H0V0z" fill="none"/></g><g><circle cx="8" cy="17" r="1"/><circle cx="12" cy="17" r="1"/><circle cx="16" cy="17" r="1"/><path d="M13,5.08V3h-2v2.08C7.61,5.57,5,8.47,5,12v2h14v-2C19,8.47,16.39,5.57,13,5.08z"/><circle cx="8" cy="20" r="1"/><circle cx="12" cy="20" r="1"/><circle cx="16" cy="20" r="1"/></g></svg>
+            
+                        <span class="text-sm text-gray-500">{{property.no_of_bathrooms_outside}} Bathrooms(Outside)</span>
+                    </div>
+                    <div class="sqft flex flex-col items-center">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M12 8.25v-1.5m0 1.5c-1.355 0-2.697.056-4.024.166C6.845 8.51 6 9.473 6 10.608v2.513m6-4.87c1.355 0 2.697.055 4.024.165C17.155 8.51 18 9.473 18 10.608v2.513m-3-4.87v-1.5m-6 1.5v-1.5m12 9.75l-1.5.75a3.354 3.354 0 01-3 0 3.354 3.354 0 00-3 0 3.354 3.354 0 01-3 0 3.354 3.354 0 00-3 0 3.354 3.354 0 01-3 0L3 16.5m15-3.38a48.474 48.474 0 00-6-.37c-2.032 0-4.034.125-6 .37m12 0c.39.049.777.102 1.163.16 1.07.16 1.837 1.094 1.837 2.175v5.17c0 .62-.504 1.124-1.125 1.124H4.125A1.125 1.125 0 013 20.625v-5.17c0-1.08.768-2.014 1.837-2.174A47.78 47.78 0 016 13.12M12.265 3.11a.375.375 0 11-.53 0L12 2.845l.265.265zm-3 0a.375.375 0 11-.53 0L9 2.845l.265.265zm6 0a.375.375 0 11-.53 0L15 2.845l.265.265z" />
+                          </svg>
+                          
+            
+                        <span class="text-sm text-gray-500">{{property.dining_hall}} Dining Hall</span>
+                    </div>
+                    <div class="sqft flex flex-col items-center">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M19 22H5C4.44772 22 4 21.5523 4 21V11.414C4 11.1488 4.10545 10.8945 4.293 10.707L11.293 3.70698C11.4806 3.51921 11.7351 3.4137 12.0005 3.4137C12.2659 3.4137 12.5204 3.51921 12.708 3.70698L19.708 10.707C19.8957 10.8943 20.0009 11.1488 20 11.414V21C20 21.5523 19.5523 22 19 22ZM10 15H14V20H18V11.828L12 5.82798L6 11.828V20H10V15Z" fill="#2E3A59"></path>
+                            </svg>
+                            
+            
+                        <span class="text-sm text-gray-500">{{property.kitchen}} Kitchen</span>
+                    </div>
+                    <div class="sqft flex flex-col items-center">
+                        <svg class="fill-gray-800" xmlns="http://www.w3.org/2000/svg" height="28" viewBox="0 0 24 24" width="24"><path d="M0 0h24v24H0z" fill="none"/><path d="M17 15h2V7c0-1.1-.9-2-2-2H9v2h8v8zM7 17V1H5v4H1v2h4v10c0 1.1.9 2 2 2h10v4h2v-4h4v-2H7z"/></svg>
+            
+                        <span class="text-sm text-gray-500">{{property.plot_area}} Sqft</span>
+                    </div>
+                </div>
+            </section>
+            <section class="amenities pb-6 mb-6 border-b">
+                <h3 class="text-2xl font-semibold mb-4">Home Amenities</h3>
+    
+                <div class="infos flex flex-col gap-y-2">
+                    <div class="electricity flex items-center gap-x-2">
+                        <span>Electricity</span>
+                        {% if property.has_electricity %}
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M12 22C6.47967 21.9939 2.00606 17.5203 2 12V11.8C2.10993 6.30453 6.63459 1.92796 12.1307 2.00088C17.6268 2.07381 22.0337 6.56889 21.9978 12.0653C21.9619 17.5618 17.4966 21.9989 12 22ZM7.41 11.59L6 13L10 17L18 9L16.59 7.58L10 14.17L7.41 11.59Z" fill="green"></path>
+                            </svg>
+                        {% else %}
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M12 22C9.34711 22.0024 6.80218 20.9496 4.9263 19.0737C3.05042 17.1978 1.99762 14.6529 2 12V11.8C2.08179 7.79223 4.5478 4.22016 8.26637 2.72307C11.9849 1.22597 16.2381 2.0929 19.074 4.92601C21.9365 7.78609 22.7932 12.0893 21.2443 15.8276C19.6955 19.5659 16.0465 22.0024 12 22ZM12 13.41L14.59 16L16 14.59L13.41 12L16 9.41001L14.59 8.00001L12 10.59L9.41001 8.00001L8.00001 9.41001L10.59 12L8.00001 14.59L9.41001 16L12 13.411V13.41Z" fill="red"></path>
+                            </svg>                            
+                        {% endif %}
+                    </div>
+                    <div class="water-supply flex items-center gap-x-2">
+                        <span>Water Supply</span>
+                        {% if property.has_watersupply %}
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M12 22C6.47967 21.9939 2.00606 17.5203 2 12V11.8C2.10993 6.30453 6.63459 1.92796 12.1307 2.00088C17.6268 2.07381 22.0337 6.56889 21.9978 12.0653C21.9619 17.5618 17.4966 21.9989 12 22ZM7.41 11.59L6 13L10 17L18 9L16.59 7.58L10 14.17L7.41 11.59Z" fill="green"></path>
+                            </svg>        
+                        {% else %}
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M12 22C9.34711 22.0024 6.80218 20.9496 4.9263 19.0737C3.05042 17.1978 1.99762 14.6529 2 12V11.8C2.08179 7.79223 4.5478 4.22016 8.26637 2.72307C11.9849 1.22597 16.2381 2.0929 19.074 4.92601C21.9365 7.78609 22.7932 12.0893 21.2443 15.8276C19.6955 19.5659 16.0465 22.0024 12 22ZM12 13.41L14.59 16L16 14.59L13.41 12L16 9.41001L14.59 8.00001L12 10.59L9.41001 8.00001L8.00001 9.41001L10.59 12L8.00001 14.59L9.41001 16L12 13.411V13.41Z" fill="red"></path>
+                            </svg>         
+                        {% endif %}
+                    </div>
+                </div>
+            </section>
+            <h3 class="text-2xl font-semibold mb-4">Owner Details</h3>
+            <section class="address pb-6 mb-6 border-b">
+                <span class="font-semibold">Name:</span>{{property.owner.first_name}} {{property.owner.last_name}}<br>
+                <span class="font-semibold">Address:</span> {{ property.address_1 }}, {{ property.city }}, {{ property.district }}, {{ property.zip_code }}
+            </section>
+
+            <section class="description pb-6 mb-6 border-b">
+                <h3 class="text-xl font-semibold mb-1">Description</h3>
+    
+                <p>
+                    {{ property.description }}
+                </p>
+                <h3 class="text-xl font-semibold mb-1">Available</h3>
+                <span>{%if property.is_occupied%}Yes{% else%}No{%endif%}
+                </span>
+                <section class="reviews">
+                    <div class="flex items-center gap-x-2">
+                        <h2 class="text-2xl font-semibold mb-4">Tenant Reviews 
+                        
+                            {% if comments %}
+                                <span class="text-sm font-bold text-gray-600 flex items-center">
+                                    {{ avg_rating }}<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4 mr-0.5 fill-gray-500">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M11.48 3.499a.562.562 0 011.04 0l2.125 5.111a.563.563 0 00.475.345l5.518.442c.499.04.701.663.321.988l-4.204 3.602a.563.563 0 00-.182.557l1.285 5.385a.562.562 0 01-.84.61l-4.725-2.885a.563.563 0 00-.586 0L6.982 20.54a.562.562 0 01-.84-.61l1.285-5.386a.562.562 0 00-.182-.557l-4.204-3.602a.563.563 0 01.321-.988l5.518-.442a.563.563 0 00.475-.345L11.48 3.5z" />
+                                </svg>.
+                                ({{ comments|length }} reviews)
+                                </span>
+                            {% endif %}
+                        </h2>
+                    </div>
+    
+                    {% if has_reserved %}  
+                        <a name="addComment"></a>
+                        <form action="{% url 'properties:add_comment' id=property.id %}" method="POST" class="mb-8 flex flex-col">
+                            {% csrf_token %}
+                            <textarea required name="comment" cols="30" rows="10" placeholder="Add your review" class="w-full border border-gray-300 rounded mb-4 resize-none"></textarea>
+                            <div class="rating mb-4">
+                                <label>
+                                    <input checked type="radio" name="stars" value="1" />
+                                    <span class="icon">★</span>
+                                  </label>
+                                  <label>
+                                    <input type="radio" name="stars" value="2" />
+                                    <span class="icon">★</span>
+                                    <span class="icon">★</span>
+                                  </label>
+                                  <label>
+                                    <input type="radio" name="stars" value="3" />
+                                    <span class="icon">★</span>
+                                    <span class="icon">★</span>
+                                    <span class="icon">★</span>   
+                                  </label>
+                                  <label>
+                                    <input type="radio" name="stars" value="4" />
+                                    <span class="icon">★</span>
+                                    <span class="icon">★</span>
+                                    <span class="icon">★</span>
+                                    <span class="icon">★</span>
+                                  </label>
+                                  <label>
+                                    <input type="radio" name="stars" value="5" />
+                                    <span class="icon">★</span>
+                                    <span class="icon">★</span>
+                                    <span class="icon">★</span>
+                                    <span class="icon">★</span>
+                                    <span class="icon">★</span>
+                                  </label>
+                            </div>
+                            <button type="submit" class="btn btn-success">Add Review</button>
+                        </form>
+                    {% endif %}
+    
+                    {% if comments %}
+                        <div class="all-reviews flex flex-col gap-y-3">
+                        {% for comment in comments %}
+                            <div class="review flex items-start gap-x-3">
+                                <div class="left">
+                                    <img src="{{ comment.user_id.profile_pic.url }}" alt="profile" class="w-8 rounded-full object-cover">
+                                </div>
+                                <div class="right">
+                                    <div class="top leading-tight mb-2">
+                                        <h6 class="font-semibold leading-tight mb-0.5">{{ comment.user_id.first_name }} {{ comment.user_id.last_name }}</h6>
+                                        <div class="text-sm text-gray-500 leading-none flex items-center gap-x-1">
+                                            <span class="ratings flex items-center">
+                                                <span class="text-sm">{{ comment.rating }}</span><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-3 h-3 mr-0.5 fill-gray-500">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" d="M11.48 3.499a.562.562 0 011.04 0l2.125 5.111a.563.563 0 00.475.345l5.518.442c.499.04.701.663.321.988l-4.204 3.602a.563.563 0 00-.182.557l1.285 5.385a.562.562 0 01-.84.61l-4.725-2.885a.563.563 0 00-.586 0L6.982 20.54a.562.562 0 01-.84-.61l1.285-5.386a.562.562 0 00-.182-.557l-4.204-3.602a.563.563 0 01.321-.988l5.518-.442a.563.563 0 00.475-.345L11.48 3.5z" />
+                                                </svg>
+                                            </span> . 
+                                            <time>{{ comment.created_at|date:"M d, Y" }}</time></div>
+                                    </div>
+                                    <p class="text-base">{{ comment.comment }}</p>
+                                </div>
+                            </div>
+                        {% endfor %}
+                        </div>
+                    {% else %}
+                        <p class="text-gray-600">No reviews yet</p>
+                    {% endif %}
+            </section>
+            </div>
+        </section>
+    
+    
+                
+
+            </section>
+            
+
+<section>
+        <div style="width: 30%;" class="right bg-white shadow-lg flex items-center justify-between gap-x-4 h-max p-4 rounded">
+            {% if user.is_authenticated %}
+            <button onclick="addToWishlist()" class="btn btn-outline-red w-full flex items-center justify-center gap-x-2">
+                <svg id="wishlist-btn-heart" xmlns="http://www.w3.org/2000/svg" fill="{% if has_wishlisted %}red {% else %}none{% endif %}" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12z" />
+                </svg>
+                <span id="wishlist-btn-text">{% if has_wishlisted %}Wishlisted{% else %}Wishlist{% endif %}</span>
+            </button>
+           
+                 <!--  <button class="border-2 border-rose-600 w-full" onclick="addToWishlist()">
+                        
+                       
+                        <svg id="wishlist-btn-heart" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12z" />
+                        </svg>
+                        <span id="wishlist-btn-text">{% if has_wishlisted %}Wishlisted{% else %}Wishlist{% endif %}</span>
+                    
+                    </button>-->
+                
+                   <form class="w-full" action="{% url 'properties:property_reserve'%}" method="POST">
+                        {% csrf_token %}
+                        <input type="hidden" name="id" value="{{ property.id }}">
+                        
+                        <button type="submit" class="btn btn-primary w-full">Reserve</button>
+                   </form>
+                    <button class="btn btn-success w-full">Contact Owner</button>
+                    {% else %}
+
+                    <div class="text-red-600">
+                        <a href="{%url 'login'%}" class="property-card rounded-xl btn btn-primary w-full font-bold mt-4 mb-4" style="height: 360px;">
+                        Please Login to Book Property </a>
+                    </div>
+                {%endif%}
+        </div>
+   
+    </section>    
+
+
+{% endblock %}
+
+{% block script %}
+<script type="text/javascript">
+    function addToWishlist() {
+
+        // wishlist btn
+        const wishlistBtnHeart = document.querySelector('#wishlist-btn-heart')
+        const wishlistBtnText = document.querySelector('#wishlist-btn-text')
+        const id = document.querySelector('input[name="id"]').value
+
+        // make http request
+        fetch(`${location.origin}/wishlists/property/`+id+'/', {
+            method: "POST",
+            headers: {
+                'X-CSRFToken': getCookie('csrftoken'), 
+                'Content-Type': 'application/json',
+            },
+            
+            mode: 'same-origin',
+           
+        })
+        .then(res => res.json())
+        .then(data => 
+        {
+            const wishlisted = data.wishlisted
+            // if wishlisted not null, value should be either true or false
+            if (wishlisted !== null) {
+                // if true, change color to red & text to Wishlisted or else vice versa
+                if (wishlisted) {
+                    wishlistBtnHeart.style.fill = 'red'
+                    wishlistBtnText.innerHTML = 'Wishlisted'
+                } else {
+                    wishlistBtnHeart.style.fill = 'none'
+                    wishlistBtnText.innerHTML = 'Wishlist'
+                }
+            }
+        })
+        
+    }
+</script>
+{%endblock%}

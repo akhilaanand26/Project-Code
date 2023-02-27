@@ -1,0 +1,58 @@
+{% load static %} 
+{% load tailwind_tags %}
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, shrink-to-fit=no"/>
+
+    {% tailwind_css %}
+
+    <title>FindAHome - {% block title %}{% endblock %}</title>
+  </head>
+  <body class="relative">
+    {% if messages %}
+      <div
+        class="alerts-container absolute top-8 z-30 w-full flex justify-center"
+      >
+        <div class="alerts" id="alerts">
+          {% for message in messages %} 
+            {% if message.tags %}
+              <div role="alert" class="alert alert-{{ message.tags }}">
+                {{ message }}
+
+                <button class="close-btn" type="button">x</button>
+              </div>
+            {% else %}
+              <div role="alert" class="alert alert-default">
+                {{ message }}
+
+                <button class="close-btn" type="button">x</button>
+              </div>
+            {% endif %} 
+          {% endfor %}
+        </div>
+      </div>
+    {% endif %}
+
+    <div class="auth-container w-screen h-screen flex overflow-x-hidden bg-blue-50"
+  >
+    <div class="image hidden md:block flex-1 w-full h-full">
+      <img
+        src="{% static 'img/house.jpeg' %}"
+        alt="House"
+        class="object-cover w-full h-full"
+      />
+    </div>
+    <main class="form flex-1 flex items-center justify-center">
+      {% block content %}{% endblock %}
+    </main>
+  </div>
+  
+  {% block script %}{% endblock %}
+</body>
+</html>
