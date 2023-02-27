@@ -150,6 +150,7 @@ def add_or_remove_wishlist(request,propertydetails_id):
 
 def add_comment(request, id):
     
+    
 
  return redirect('properties:properties_details', id=id)
 
