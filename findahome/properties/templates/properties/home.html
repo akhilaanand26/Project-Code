@@ -4,6 +4,17 @@
 {% block title %}Find your sweet home{% endblock %}
 
 {% block content %}
+<script type="text/javascript">
+    (function(d, m){
+        var kommunicateSettings = 
+            {"appId":"37f07e9da2b797a453ddc12867b13900","popupWidget":true,"automaticChatOpenOnNavigation":true};
+        var s = document.createElement("script"); s.type = "text/javascript"; s.async = true;
+        s.src = "https://widget.kommunicate.io/v2/kommunicate.app";
+        var h = document.getElementsByTagName("head")[0]; h.appendChild(s);
+        window.kommunicate = m; m._globals = kommunicateSettings;
+    })(document, window.kommunicate || {});
+/* NOTE : Use web server to view HTML files as real-time update will not work if you directly open the HTML file in the browser. */
+</script>
     <section id="banner" class="banner">
         <div class="text absolute top-16 left-6 font-semibold text-7xl text-white px-4">
             Let's find a home <br>

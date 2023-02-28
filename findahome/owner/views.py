@@ -80,15 +80,14 @@ def accept_request(request, request_id):
 
     if request.method == "POST":
         property = Property.objects.get(id=r.property_id.id)
-        # when you accept a pending request, decline all the other pending request at that time of the same property, and mark property as is_occupied=True
+       
         Reservation.objects.filter(property_id=property.id, status=PENDING).exclude(id=r.id).update(status=CANCELLED)
 
         r.status = CONFIRMED
         property.is_occupied = True
         r.save()
         property.save()
-        # TODO: send mail to user about confirmation
-        
+       
         messages.success(request, "Reservation request for that property has been confirmed successfully")
         return redirect('owner:request')
 
@@ -100,7 +99,6 @@ def decline_request(request, request_id):
     r = get_object_or_404(Reservation, id=request_id, property_id__owner=request.user, status=PENDING)
 
     if request.method == "POST":
-        # mark it as CANCELLED
         r.status = CANCELLED
         r.save()
         messages.success(request, "Reservation request has been declined successfully")
@@ -109,4 +107,6 @@ def decline_request(request, request_id):
     return render(request, 'owner/declineConfirmation.html')
 
 def pending_request(request):
+       reservations = Reservation.objects.filter(property_id__owner=request.user, status=PENDING).order_by('-created_at')
+       
        return render(request, 'owner/request_history.html')

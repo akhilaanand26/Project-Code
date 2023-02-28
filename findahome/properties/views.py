@@ -150,9 +150,17 @@ def add_or_remove_wishlist(request,propertydetails_id):
 
 def add_comment(request, id):
     
-    
+    comments = details.comment_set.all().order_by('-created_at')
+    avg_rating = 0
 
- return redirect('properties:properties_details', id=id)
+    if len(comments) > 0:
+        for comment in comments:
+            avg_rating += comment.rating
+    
+        avg_rating = avg_rating / len(comments)
+
+
+    return redirect('properties:properties_details', id=id)
 
 
 
