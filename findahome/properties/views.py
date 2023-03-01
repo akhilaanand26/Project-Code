@@ -4,9 +4,12 @@ from properties.models import Property
 from .models import Wishlist
 from .models import Reservation
 from .models import Comment
+from properties.constants import PENDING, CANCELLED, CONFIRMED
 from django.db.models import Q
 from django.shortcuts import get_object_or_404
 from django.http import JsonResponse
+from django.conf import settings
+#stripe.api_key = settings.STRIPE_PRIVATE_KEY
 
 
 # Create your views here.
@@ -20,8 +23,8 @@ def home(request):
     
 
 def reservation(request):
-    
-    return render(request,'properties/reservation.html')
+    reservations = Reservation.objects.filter(user_id=request.user).order_by('-created_at')
+    return render(request,'properties/reservation.html',{"reservations":reservations})
 
 def search(request):
     query = request.GET.get('q')
@@ -102,11 +105,20 @@ def property_details(request,propertydetails_id):
     details = Property.objects.get(id=propertydetails_id)
     if request.user.is_authenticated:
         has_wishlisted = Wishlist.objects.filter(user_id=request.user, property_id=propertydetails_id).exists()
+        has_reserved = Reservation.objects.filter(user_id=request.user.id, property_id=propertydetails_id, status=CONFIRMED).exists()
     else:
         has_wishlisted = False
-         
+        has_reserved = False 
    
-    return render(request,'properties/property_details.html',{"property": details, "has_wishlisted": has_wishlisted})
+    comments = details.comment_set.all().order_by('-created_at')
+    avg_rating = 0
+
+    if len(comments) > 0:
+        for comment in comments:
+            avg_rating += comment.rating
+    
+        avg_rating = avg_rating / len(comments)
+    return render(request,'properties/property_details.html',{"property": details, "has_wishlisted": has_wishlisted,"has_reserved":has_reserved,"comments":comments,"avg_rating":avg_rating})
 
 def property_reserve(request):
     id = request.POST.get('id')
@@ -133,7 +145,7 @@ def add_or_remove_wishlist(request,propertydetails_id):
     if request.method == "POST":
         
 
-        property = get_object_or_404(Property, id=propertydetails_id)
+        property = get_object_or_404(Property, id=id)
 
         # create a wishlist if not exists, else remove it if exists
         wishlist = Wishlist.objects.filter(user_id=request.user, property_id=property)
@@ -149,19 +161,38 @@ def add_or_remove_wishlist(request,propertydetails_id):
 
 
 def add_comment(request, id):
-    
-    comments = details.comment_set.all().order_by('-created_at')
-    avg_rating = 0
+       if request.method == "POST":
 
-    if len(comments) > 0:
-        for comment in comments:
-            avg_rating += comment.rating
-    
-        avg_rating = avg_rating / len(comments)
+        property = get_object_or_404(Property, id=id)
+       
+        has_reserved = Reservation.objects.filter(user_id=request.user, property_id=property, status=CONFIRMED).exists()
+        
+        comment = request.POST.get('comment')
+        stars = request.POST.get('stars')
 
+        comment = Comment(user_id=request.user, property_id=property, comment=comment, rating=stars)
+        comment.save()
+        messages.success(request, "Your comment has been added successfully")
 
-    return redirect('properties:properties_details', id=id)
+        return redirect('properties:property_details',propertydetails_id=id)
 
+# def payment(request):
+#     stripe.api_key = settings.STRIPE_PRIVATE_KEY
+#     session = stripe.checkout.Session.create(
+#         payment_method_types=['card'],
+#         line_items=[{
+#             'price': 'price_1MfyQ0SIBKZt2GrFUxYh2TYT',
+#             'quantity': 1,
+#         }],
+#         mode='payment',
+#         success_url=request.build_absolute_uri(reverse('thanks'))+'?session_id = {CHECKOUT_SESSION_ID}',
+#         cancel_url=request.build_absolute_uri(reverse('properties/home.html')),
+#     )
+#     context = {
+#         'session_id': session.id,
+#         'stripe_public_key': settings.STRIPE_PUBLIC_KEY
+#     }
+#     return render(request, 'properties/payments.html', context)
 
-
-
+# def thanks(request):
+#  return render(request,"properties/thanks.html")

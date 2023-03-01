@@ -71,7 +71,7 @@ def delete_property(request, property_id):
     return render(request, 'owner/delete_confirmation.html', {"property": p})
 
 def request_views(request):
-   reservations = Reservation.objects.filter(property_id__owner=request.user).order_by('-created_at')
+   reservations = Reservation.objects.filter(property_id__owner=request.user, status=PENDING).order_by('-created_at')
 
    return render(request,'owner/request.html',{"reservations":reservations})
 
@@ -106,7 +106,9 @@ def decline_request(request, request_id):
 
     return render(request, 'owner/declineConfirmation.html')
 
-def pending_request(request):
-       reservations = Reservation.objects.filter(property_id__owner=request.user, status=PENDING).order_by('-created_at')
+def other_request(request):
+    
+    # get all the requests
+    reservations = Reservation.objects.filter(property_id__owner=request.user).exclude(status=PENDING).order_by('-created_at')
        
-       return render(request, 'owner/request_history.html')
+    return render(request, 'owner/request_history.html',{"reservations":reservations})

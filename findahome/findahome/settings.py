@@ -31,6 +31,7 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    
     'theme',
     'tailwind',
     'django_browser_reload',
@@ -159,5 +160,9 @@ EMAIL_PORT = 587
 EMAIL_HOST_USER = 'akhilaanand095@gmail.com'
 EMAIL_HOST_PASSWORD = 'wtpudqlsuosuhofd'
 
-LOGIN_REDIRECT_URL = 'properties:home' # where to redirect after login
+LOGIN_REDIRECT_URL = 'properties:home' 
 LOGIN_URL = 'login'
+
+#STRIPE_PUBLIC_KEY = 'pk_test_51MgmWTSEWx5psR3yiVlYshTXBtV6jrdAf7GCdIFqUXPThFaNbdDF9aHZ4nqDFndPUsG68ob51b46gpH3od4nI9ND00N1k2iOFn'
+
+#STRIPE_PRIVATE_KEY = 'sk_test_51MgmWTSEWx5psR3ywRKGXeFDsM8HOvLyqyFZ1hHQqlWLsJO8F5cjSBmnbi5AS0BmsvEbKMamKdq1OIveaScfuYYO00Hddh9gB4'
