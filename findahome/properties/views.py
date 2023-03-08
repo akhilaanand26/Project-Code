@@ -2,6 +2,8 @@ from django.shortcuts import render,redirect
 from django.contrib import messages
 from properties.models import Property
 from .models import Wishlist
+import stripe
+from django.urls import reverse
 from .models import Reservation
 from .models import Comment
 from properties.constants import PENDING, CANCELLED, CONFIRMED
@@ -9,10 +11,11 @@ from django.db.models import Q
 from django.shortcuts import get_object_or_404
 from django.http import JsonResponse
 from django.conf import settings
-#stripe.api_key = settings.STRIPE_PRIVATE_KEY
+stripe.api_key = settings.STRIPE_PRIVATE_KEY
 
 
-# Create your views here.
+
+
 def home(request):
     latest_properties = Property.objects.all().filter(is_occupied=False).order_by('-created_at')
     if request.user.is_authenticated:
@@ -50,8 +53,6 @@ def search(request):
     current_no_of_floors = request.GET.get('floors')
 
 
-    # make query to db
-    # search q in title, city, district, address_1, zip_code
     properties = Property.objects.filter(Q(title__icontains=query) | Q(city__icontains=query) | Q(district__name__icontains=query) | Q(address_1__icontains=query) | Q(zip_code__icontains=query)).exclude(is_occupied=True)
     print(properties)
     if current_min_price:
@@ -147,11 +148,11 @@ def add_or_remove_wishlist(request,propertydetails_id):
 
         property = get_object_or_404(Property, id=id)
 
-        # create a wishlist if not exists, else remove it if exists
+        
         wishlist = Wishlist.objects.filter(user_id=request.user, property_id=property)
         
         if len(wishlist) > 0:
-            # remove it
+            
             wishlist[0].delete()
             wishlisted = False
         else:
@@ -176,23 +177,23 @@ def add_comment(request, id):
 
         return redirect('properties:property_details',propertydetails_id=id)
 
-# def payment(request):
-#     stripe.api_key = settings.STRIPE_PRIVATE_KEY
-#     session = stripe.checkout.Session.create(
-#         payment_method_types=['card'],
-#         line_items=[{
-#             'price': 'price_1MfyQ0SIBKZt2GrFUxYh2TYT',
-#             'quantity': 1,
-#         }],
-#         mode='payment',
-#         success_url=request.build_absolute_uri(reverse('thanks'))+'?session_id = {CHECKOUT_SESSION_ID}',
-#         cancel_url=request.build_absolute_uri(reverse('properties/home.html')),
-#     )
-#     context = {
-#         'session_id': session.id,
-#         'stripe_public_key': settings.STRIPE_PUBLIC_KEY
-#     }
-#     return render(request, 'properties/payments.html', context)
+def payment(request):
+    stripe.api_key = settings.STRIPE_PRIVATE_KEY
+    session = stripe.checkout.Session.create(
+        payment_method_types=['card'],
+        line_items=[{
+            'price': 'price_1MixejSEWx5psR3yhdykXFyy',
+            'quantity': 1,
+        }],
+        mode='payment',
+        success_url=request.build_absolute_uri(reverse('thanks'))+'?session_id = {CHECKOUT_SESSION_ID}',
+        cancel_url=request.build_absolute_uri(reverse('properties:home')),
+    )
+    context = {
+        'session_id': session.id,
+        'stripe_public_key': settings.STRIPE_PUBLIC_KEY
+    }
+    return render(request, 'properties/payment.html', context)
 
-# def thanks(request):
-#  return render(request,"properties/thanks.html")
+def thanks(request):
+ return render(request,"properties/thanks.html")

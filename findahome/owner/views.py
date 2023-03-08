@@ -44,7 +44,7 @@ def update_property(request, property_id):
         form = PropertyForm(request.POST, instance=p)
         image_form = PropertyImageForm(request.POST,request.FILES,instance=p_image)
         
-        # do form validation for each field
+        
         if form.is_valid() and image_form.is_valid():
             form.save()
             image_form.save()
@@ -108,7 +108,7 @@ def decline_request(request, request_id):
 
 def other_request(request):
     
-    # get all the requests
+    
     reservations = Reservation.objects.filter(property_id__owner=request.user).exclude(status=PENDING).order_by('-created_at')
        
     return render(request, 'owner/request_history.html',{"reservations":reservations})

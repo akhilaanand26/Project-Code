@@ -17,8 +17,10 @@ from django.contrib import admin
 from django.urls import path,include
 from django.conf import settings 
 #from properties import views
+
 from django.conf.urls.static import static
 from users.views import login_view,signup_view,logout_view,ChangePassword,forgetpswd
+from properties import views
 
 
 urlpatterns = [
@@ -31,7 +33,7 @@ urlpatterns = [
     path("change-password/<token>/",ChangePassword,name="change-password"),
     path("forgetpswd/",forgetpswd, name="forgetpswd"),   
     path("owner/",include('owner.urls')),   
-    #path('thanks/', views.thanks, name='thanks'),
+    path('thanks/', views.thanks, name='thanks'),
 
 ]
 

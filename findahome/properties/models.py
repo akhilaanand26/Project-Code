@@ -22,7 +22,7 @@ class Property(models.Model):
     no_of_floors = models.PositiveSmallIntegerField(default=1, validators=[MaxValueValidator(12)])
     
     no_of_bathrooms_inside= models.PositiveSmallIntegerField(default=1, validators=[MaxValueValidator(12)])
-    no_of_bathrooms_outside= models.PositiveSmallIntegerField(default=1, validators=[MaxValueValidator(12)])
+    no_of_bathrooms_outside= models.PositiveSmallIntegerField(default=0, validators=[MaxValueValidator(12)])
     no_of_bedrooms = models.PositiveSmallIntegerField(default=1, validators=[MaxValueValidator(12)])
     master_bedroon = models.PositiveSmallIntegerField(default=1, validators=[MaxValueValidator(12)])
     
@@ -31,8 +31,8 @@ class Property(models.Model):
     kitchen = models.PositiveSmallIntegerField(default=1, validators=[MaxValueValidator(12)])
 
 
-    feature_1 = models.CharField( max_length=50)
-    feature_2 = models.CharField( max_length=50)
+    feature_1 = models.CharField( max_length=100)
+    feature_2 = models.CharField( max_length=100)
 
     plot_area = models.PositiveIntegerField(validators=[MinValueValidator(500)]) # sqft
     
@@ -109,10 +109,7 @@ class Reservation(models.Model):
     def __str__(self):
         return self.property_id.title + " - " + self.user_id.first_name
 
-    class Meta:
-        ordering = ('-created_at', )
-        verbose_name = 'reservation'
-        verbose_name_plural = 'reservations'
+    
 
 class Comment(models.Model):
     user_id = models.ForeignKey(User, on_delete=models.CASCADE)
@@ -128,10 +125,7 @@ class Comment(models.Model):
     def __str__(self):
         return self.comment
 
-    class Meta:
-        ordering = ('-created_at', )
-        verbose_name = 'comment'
-        verbose_name_plural = 'comments'
+    
     
 
 
