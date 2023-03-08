@@ -1,0 +1,73 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Terms And Conditions{% endblock %}
+
+
+{% block content %}
+<div class="box-border h-32 w-32 p-4 border-4 ">
+<div class="p-4 bg-white shadow-md">
+    <h2 class="text-lg font-semibold mb-4">Terms and Conditions</h2>
+    <ul class="list-disc ml-8">
+      <li class="mb-2">The tenant agrees to pay the monthly rent on or before the due date.</li>
+      <li class="mb-2">The tenant will not make any alterations to the property without the landlord's written consent.</li>
+      <li class="mb-2">The tenant is responsible for maintaining the property and reporting any necessary repairs to the landlord.</li>
+      <li class="mb-2">The tenant is not allowed to sublet or assign the lease to another party without the landlord's written consent.</li>
+      <li class="mb-2">The tenant agrees to comply with all applicable laws and regulations.</li>
+      <li class="mb-2">The landlord reserves the right to terminate the lease if the tenant breaches any of the terms and conditions.</li>
+    </ul>
+    <div class="mt-4">
+        {% comment %} <div class="flex items-center">
+            <input type="checkbox" id="myCheckbox" class="form-checkbox h-4 w-4 text-indigo-600" required/>
+            <label for="myCheckbox" class="ml-2 text-sm text-gray-700">
+                I have read and agree to the above terms and conditions.
+            </label>
+          </div> {% endcomment %}
+          <form id="myForm">
+            <label>
+              <input type="checkbox" id="termsCheckbox" class="form-checkbox h-5 w-5 text-blue-600" required>
+              <span class="ml-2 text-gray-700">I agree to the terms and conditions</span>
+            </label>
+            <button type="submit" id="submitButton" class="mt-4 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" disabled>
+                Pay
+            </button>
+          </form>
+      
+        {% comment %} <button class="bg-blue-500 hover:bg-blue-400 text-white font-bold py-2 px-4 border-b-4 border-blue-700 hover:border-blue-500 rounded">
+         Pay
+        </button></a> {% endcomment %}
+    </div>
+  </div>
+</div>
+{% endblock %}
+{% block script %}
+<script>
+    const termsCheckbox = document.getElementById('termsCheckbox');
+    const submitButton = document.getElementById('submitButton');
+    
+    termsCheckbox.addEventListener('change', function() {
+      if (termsCheckbox.checked) {
+        submitButton.removeAttribute('disabled');
+      } else {
+        submitButton.setAttribute('disabled', '');
+      }
+    });
+    
+    document.getElementById('myForm').addEventListener('submit', function(event) {
+      event.preventDefault();
+      // redirect to next page
+      window.location.href = 'properties/payment.html';
+    });
+  </script>
+
+{% comment %} <script>
+const checkbox = document.getElementById('myCheckbox');
+if (checkbox.checked==True) {
+  // Do something if the checkbox is checked
+  <a href="{% url 'properties:payment' %}" ></a>
+} else {
+  // Do something else if the checkbox is not checked
+  <a href="{% url 'properties:terms' %}" ></a>
+}
+</script> {% endcomment %}
+{% endblock %}

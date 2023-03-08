@@ -7,6 +7,7 @@ from .views import property_details
 from .views import add_comment
 from .views import payment
 from .views import thanks
+from .views import terms
 from .views import property_reserve,add_or_remove_wishlist
 
 app_name='properties'
@@ -21,5 +22,6 @@ urlpatterns = [
     path('wishlists/property/<int:propertydetails_id>/',add_or_remove_wishlist, name='add_or_remove_wishlist'),
     path('property/<int:id>/add-comment', add_comment, name='add_comment'),
     path('payment',payment,name='payment'),
+    path('terms',terms,name='terms'),
     
 ]

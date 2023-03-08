@@ -197,3 +197,6 @@ def payment(request):
 
 def thanks(request):
  return render(request,"properties/thanks.html")
+
+def terms(request):
+ return render(request,"properties/terms.html")
