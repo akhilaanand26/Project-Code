@@ -25,6 +25,6 @@ class PropertyAdmin(admin.ModelAdmin):
 admin.site.register(Property, PropertyAdmin)
 admin.site.register(PropertyImages)
 admin.site.register(District)
-#admin.site.register(Comment)
-#admin.site.register(Wishlist)
+admin.site.register(Comment)
+admin.site.register(Wishlist)
 
