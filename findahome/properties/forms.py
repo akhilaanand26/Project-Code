@@ -10,4 +10,5 @@ class PropertyForm(forms.ModelForm):
 class PropertyImageForm(forms.ModelForm):
     class Meta:
         model = PropertyImages
-        fields = ('image',)    
+        fields = ('image',)   
+        # ' video_file' 

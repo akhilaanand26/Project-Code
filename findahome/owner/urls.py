@@ -1,5 +1,6 @@
 from django.urls import path
 from .views import properties_views,add_property, delete_property, update_property,request_views,accept_request,decline_request,other_request
+from .views import rental_map
 
 app_name='owner'
 
@@ -12,4 +13,6 @@ urlpatterns = [
     path('other-requests/',other_request, name='other_requests'),
     path('accept-request/<int:request_id>/',accept_request, name='accept_request'),
     path('decline-request/<int:request_id>/',decline_request, name='decline_request'),
+    path('map/', rental_map, name='rental_map'),
 ]
+

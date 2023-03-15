@@ -1,7 +1,7 @@
-{% extends 'base.html' %}
-{% load static %}
+{% comment %} {% extends 'base.html' %} {% endcomment %}
+{% comment %} {% load static %} {% endcomment %}
 
-{% block title %}Terms And Conditions{% endblock %}
+{% comment %} {% block title %}Terms And Conditions{% endblock %} {% endcomment %}
 
 
 {% block content %}
@@ -56,7 +56,7 @@
     document.getElementById('myForm').addEventListener('submit', function(event) {
       event.preventDefault();
       // redirect to next page
-      window.location.href = 'properties/payment.html';
+      window.location.href = 'properties/payment';
     });
   </script>
 

@@ -21,7 +21,7 @@ urlpatterns = [
     path('property/reserve',property_reserve,name='property_reserve'),
     path('wishlists/property/<int:propertydetails_id>/',add_or_remove_wishlist, name='add_or_remove_wishlist'),
     path('property/<int:id>/add-comment', add_comment, name='add_comment'),
-    path('payment',payment,name='payment'),
+    path('properties/payment',payment,name='payment'),
     path('terms',terms,name='terms'),
     
 ]

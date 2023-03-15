@@ -68,6 +68,7 @@ class Property(models.Model):
 class PropertyImages(models.Model):
     property_id = models.ForeignKey(Property, on_delete=models.CASCADE)
     image = models.ImageField(upload_to='properties/')
+    # video_file = models.FileField(upload_to='properties/')
 
     def __str__(self):
         return self.property_id.title

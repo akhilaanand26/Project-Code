@@ -171,6 +171,21 @@
                 </div>
             </div>
 
+            <div class="images-form flex flex-col mb-4 gap-y-3 items-start">
+                <h3 class="font-semibold text-gray-900 text-lg mt-4 mb-2">Property Images</h3>
+
+                {{ formset.management_form }}
+                {% for form in formset %}
+                    <div class="image-form flex justify-between w-full items-center mb-2">
+                        {{ form.as_p }}
+                    </div>
+                {% endfor %}
+
+                <button type="button" class="btn btn-success mt-4" id="add-form">
+                   + Add Another Image
+                </button>
+            </div>
+
             <div id="common-error" class="text-sm mt-4 mb-2 text-red-500">
             </div>
             <div class="form-group image {% if image_form.image.errors %}error{% endif %}">
@@ -183,4 +198,30 @@
             <button type="submit" class="btn btn-primary w-full font-bold mt-8 mb-4">Update Property</button>
         </form>
     </div>
+{% endblock %}
+
+{% block script %}
+    <script type="text/javascript">
+        let imageForm  = document.querySelectorAll('.image-form')
+        let form = document.querySelector('.images-form')
+        let addButton = document.getElementById('add-form')
+        let totalForms = document.querySelector("#id_form-TOTAL_FORMS")
+
+        let formNum = imageForm.length - 1
+
+        addButton.addEventListener('click', addForm)
+
+        function addForm(e) {
+            e.preventDefault()
+
+            let newForm = imageForm[imageForm.length - 1].cloneNode(true)
+            let formRegex = RegExp(`form-(\\d){1}-`,'g') //Regex to find all instances of the form number
+            
+            formNum++ //Increment the form number
+            newForm.innerHTML = newForm.innerHTML.replace(formRegex, `form-${formNum}-`) //Update the new form to have the correct form number
+            form.insertBefore(newForm, addButton) //Insert the new form at the end of the list of forms
+
+            totalForms.setAttribute('value', `${formNum+1}`) //Increment the number of total forms in the management form
+        }
+    </script>
 {% endblock %}
