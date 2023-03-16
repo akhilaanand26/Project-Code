@@ -4,6 +4,8 @@ from django.utils import timezone
 from django.urls import reverse
 from users.models import User
 from .constants import PENDING, CANCELLED, CONFIRMED
+# from django.core.validators import FileExtensionValidator
+
 
 class District(models.Model):
     name = models.CharField(max_length=50,unique=True)
@@ -68,7 +70,7 @@ class Property(models.Model):
 class PropertyImages(models.Model):
     property_id = models.ForeignKey(Property, on_delete=models.CASCADE)
     image = models.ImageField(upload_to='properties/')
-    # video_file = models.FileField(upload_to='properties/')
+    # video_file = models.FileField(upload_to='properties/',validators=[FileExtensionValidator(['mp4', 'avi'])])
 
     def __str__(self):
         return self.property_id.title
@@ -125,6 +127,37 @@ class Comment(models.Model):
 
     def __str__(self):
         return self.comment
+
+
+# class MaintenanceRequest(models.Model):
+#     ALL_STATUSES = [
+#         (PENDING, "Pending"),
+#         (CANCELLED, "Cancelled"),
+#         (CONFIRMED, "Confirmed"),
+#     ]
+#     user_id = models.ForeignKey(User, on_delete=models.CASCADE)
+#     property_id = models.ForeignKey(Property, on_delete=models.CASCADE)
+#     title = models.CharField(max_length=100)
+#     description = models.TextField()
+#     date_created = models.DateTimeField(auto_now_add=True)
+#     status = models.CharField(max_length=20, choices=ALL_STATUSES, default=PENDING)
+#     lease = models.ForeignKey(Lease, on_delete=models.CASCADE)
+
+#     def __str__(self):
+#         return self.title
+
+
+# class Lease(models.Model):
+#     user_id = models.ForeignKey(User, on_delete=models.CASCADE)
+#     property_id = models.ForeignKey(Property, on_delete=models.CASCADE)
+#     start_date = models.DateField()
+#     end_date = models.DateField()
+
+#     def __str__(self):
+#         return f"{self.user_id} - {self.property_id}"
+
+
+
 
     
     

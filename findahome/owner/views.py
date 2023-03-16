@@ -5,6 +5,8 @@ from properties.models import Property,PropertyImages,Reservation
 from properties.constants import PENDING, CANCELLED, CONFIRMED
 from django.shortcuts import get_object_or_404
 from django.forms import modelformset_factory
+# from .models import Property, Lease, MaintenanceRequest
+# from .forms import MaintenanceRequestForm
 import googlemaps
 API_KEY = 'AIzaSyAtDBI_DGeh1WZEejPVXosbD1NL1KqLNOo'
 
@@ -196,4 +198,27 @@ def rental_map(request):
         'markers': markers,
     }
     return render(request, 'owner/map.html', context)
+
+# def create_maintenance_request(request, lease_id):
+#     lease = get_object_or_404(Lease, id=lease_id)
+#     if request.user != lease.property.owner:
+#         return redirect('dashboard')
+#     if request.method == 'POST':
+#         form = MaintenanceRequestForm(request.POST)
+#         if form.is_valid():
+#             maintenance_request = form.save(commit=False)
+#             maintenance_request.lease = lease
+#             maintenance_request.save()
+#             messages.success(request, 'Maintenance request submitted successfully!')
+#             return redirect('dashboard')
+#     else:
+#         form = MaintenanceRequestForm()
+#     return render(request, 'maintenance_request/create.html', {'form': form, 'lease': lease})
+
+
+# def view_maintenance_requests(request):
+#     properties = Property.objects.filter(owner=request.user)
+#     leases = Lease.objects.filter(property__in=properties)
+#     maintenance_requests = MaintenanceRequest.objects.filter(lease__in=leases)
+#     return render(request, 'maintenance_request/list.html', {'maintenance_requests': maintenance_requests})
 
