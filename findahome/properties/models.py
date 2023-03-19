@@ -3,7 +3,7 @@ from django.core.validators import MaxValueValidator, MinValueValidator, RegexVa
 from django.utils import timezone
 from django.urls import reverse
 from users.models import User
-from .constants import PENDING, CANCELLED, CONFIRMED
+from .constants import PENDING, CANCELLED, EARLY_OCCUPIED,ACTIVE
 # from django.core.validators import FileExtensionValidator
 
 
@@ -99,12 +99,13 @@ class Reservation(models.Model):
     ALL_STATUSES = [
         (PENDING, "Pending"),
         (CANCELLED, "Cancelled"),
-        (CONFIRMED, "Confirmed"),
+        (EARLY_OCCUPIED,"Early Occupied"),
+        (ACTIVE,"Active")
     ]
 
     user_id = models.ForeignKey(User, on_delete=models.CASCADE)
     property_id = models.ForeignKey(Property, on_delete=models.CASCADE)
-    status = models.CharField(max_length=12, choices=ALL_STATUSES, default=PENDING)
+    status = models.CharField(max_length=20, choices=ALL_STATUSES, default=PENDING)
 
     created_at = models.DateTimeField(default=timezone.now) # can be edited/updated manually
     updated_at = models.DateTimeField(auto_now=True)
@@ -129,22 +130,14 @@ class Comment(models.Model):
         return self.comment
 
 
-# class MaintenanceRequest(models.Model):
-#     ALL_STATUSES = [
-#         (PENDING, "Pending"),
-#         (CANCELLED, "Cancelled"),
-#         (CONFIRMED, "Confirmed"),
-#     ]
-#     user_id = models.ForeignKey(User, on_delete=models.CASCADE)
-#     property_id = models.ForeignKey(Property, on_delete=models.CASCADE)
-#     title = models.CharField(max_length=100)
-#     description = models.TextField()
-#     date_created = models.DateTimeField(auto_now_add=True)
-#     status = models.CharField(max_length=20, choices=ALL_STATUSES, default=PENDING)
-#     lease = models.ForeignKey(Lease, on_delete=models.CASCADE)
-
-#     def __str__(self):
-#         return self.title
+class MaintenanceRequest(models.Model):
+    
+    user_id = models.ForeignKey(User, on_delete=models.CASCADE)
+    property_id = models.ForeignKey(Property, on_delete=models.CASCADE)
+    description = models.TextField()
+    date_created = models.DateTimeField(auto_now_add=True)
+    def __str__(self):
+        return self.description
 
 
 # class Lease(models.Model):

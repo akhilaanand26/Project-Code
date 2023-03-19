@@ -2,10 +2,10 @@ from django.shortcuts import render,redirect
 from django.contrib import messages
 from properties.forms import PropertyForm,PropertyImageForm
 from properties.models import Property,PropertyImages,Reservation
-from properties.constants import PENDING, CANCELLED, CONFIRMED
+from properties.constants import PENDING, CANCELLED, ACTIVE,EARLY_OCCUPIED
 from django.shortcuts import get_object_or_404
 from django.forms import modelformset_factory
-# from .models import Property, Lease, MaintenanceRequest
+from properties.models import MaintenanceRequest
 # from .forms import MaintenanceRequestForm
 import googlemaps
 API_KEY = 'AIzaSyAtDBI_DGeh1WZEejPVXosbD1NL1KqLNOo'
@@ -94,6 +94,15 @@ def update_property(request, property_id):
 
                         if f in forms_to_delete:
                             property_image.delete()
+            print(form.cleaned_data.get('is_occupied'))
+            if not form.cleaned_data.get('is_occupied'):
+                reservations=Reservation.objects.filter(property_id=property_id,status=ACTIVE)
+                print(reservations)
+                if len(reservations)>0:
+                    for reservation in reservations:
+                        reservation.status=EARLY_OCCUPIED
+                        reservation.save()
+                
                         
             messages.success(request, "Property has been updated successfully")
             return redirect('owner:properties')
@@ -148,7 +157,7 @@ def accept_request(request, request_id):
        
         Reservation.objects.filter(property_id=property.id, status=PENDING).exclude(id=r.id).update(status=CANCELLED)
 
-        r.status = CONFIRMED
+        r.status = ACTIVE
         property.is_occupied = True
         r.save()
         property.save()
@@ -199,26 +208,14 @@ def rental_map(request):
     }
     return render(request, 'owner/map.html', context)
 
-# def create_maintenance_request(request, lease_id):
-#     lease = get_object_or_404(Lease, id=lease_id)
-#     if request.user != lease.property.owner:
-#         return redirect('dashboard')
-#     if request.method == 'POST':
-#         form = MaintenanceRequestForm(request.POST)
-#         if form.is_valid():
-#             maintenance_request = form.save(commit=False)
-#             maintenance_request.lease = lease
-#             maintenance_request.save()
-#             messages.success(request, 'Maintenance request submitted successfully!')
-#             return redirect('dashboard')
-#     else:
-#         form = MaintenanceRequestForm()
-#     return render(request, 'maintenance_request/create.html', {'form': form, 'lease': lease})
+def view_maintenance_requests(request):
+    properties = Property.objects.filter(owner=request.user.id)
+
+    maintenance_requests = MaintenanceRequest.objects.filter(property_id__in=properties)
+    return render(request, 'owner/view_maintenancerequest.html', {'maintenance_requests': maintenance_requests})
 
 
-# def view_maintenance_requests(request):
-#     properties = Property.objects.filter(owner=request.user)
-#     leases = Lease.objects.filter(property__in=properties)
-#     maintenance_requests = MaintenanceRequest.objects.filter(lease__in=leases)
-#     return render(request, 'maintenance_request/list.html', {'maintenance_requests': maintenance_requests})
+
+
+
 

@@ -9,7 +9,7 @@ from .views import payment
 from .views import thanks
 from .views import terms
 from .views import property_reserve,add_or_remove_wishlist
-
+from .views import  create_maintenance_request
 app_name='properties'
 
 urlpatterns = [
@@ -22,6 +22,7 @@ urlpatterns = [
     path('wishlists/property/<int:propertydetails_id>/',add_or_remove_wishlist, name='add_or_remove_wishlist'),
     path('property/<int:id>/add-comment', add_comment, name='add_comment'),
     path('properties/payment',payment,name='payment'),
-    path('terms',terms,name='terms'),
+    path('terms/',terms,name='terms'),
+    path('maintenance_request/<int:property_id>/', create_maintenance_request,name='maintenancerequest'),
     
 ]

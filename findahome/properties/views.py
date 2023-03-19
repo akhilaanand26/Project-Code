@@ -2,11 +2,12 @@ from django.shortcuts import render,redirect
 from django.contrib import messages
 from properties.models import Property
 from .models import Wishlist
+from .forms import MaintenanceRequestForm
 import stripe
 from django.urls import reverse
 from .models import Reservation
 from .models import Comment
-from properties.constants import PENDING, CANCELLED, CONFIRMED
+from properties.constants import PENDING, CANCELLED, ACTIVE,EARLY_OCCUPIED
 from django.db.models import Q
 from django.shortcuts import get_object_or_404
 from django.http import JsonResponse
@@ -106,10 +107,28 @@ def property_details(request,propertydetails_id):
     details = Property.objects.get(id=propertydetails_id)
     if request.user.is_authenticated:
         has_wishlisted = Wishlist.objects.filter(user_id=request.user, property_id=propertydetails_id).exists()
-        has_reserved = Reservation.objects.filter(user_id=request.user.id, property_id=propertydetails_id, status=CONFIRMED).exists()
+        has_reserved = Reservation.objects.filter(user_id=request.user.id, property_id=propertydetails_id, status__in=[ACTIVE,EARLY_OCCUPIED]).exists()
     else:
         has_wishlisted = False
         has_reserved = False 
+    reservation = None
+    is_currentuser =None
+
+    try:
+        reservation = Reservation.objects.get(user_id=request.user.id, property_id=details.id, status=PENDING)
+        
+    except Reservation.DoesNotExist:
+        # We have no object! Do nothing...
+        pass
+
+    try:
+        is_currentuser = Reservation.objects.get(user_id=request.user.id, property_id=details.id, status=ACTIVE)
+        
+    except Reservation.DoesNotExist:
+        # We have no object! Do nothing...
+        pass
+
+
    
     comments = details.comment_set.all().order_by('-created_at')
     avg_rating = 0
@@ -119,7 +138,7 @@ def property_details(request,propertydetails_id):
             avg_rating += comment.rating
     
         avg_rating = avg_rating / len(comments)
-    return render(request,'properties/property_details.html',{"property": details, "has_wishlisted": has_wishlisted,"has_reserved":has_reserved,"comments":comments,"avg_rating":avg_rating})
+    return render(request,'properties/property_details.html',{"property": details, "has_wishlisted": has_wishlisted,"has_reserved":has_reserved,"comments":comments,"avg_rating":avg_rating,"reservation":reservation,"is_currentuser":is_currentuser})
 
 def property_reserve(request):
     id = request.POST.get('id')
@@ -166,7 +185,7 @@ def add_comment(request, id):
 
         property = get_object_or_404(Property, id=id)
        
-        has_reserved = Reservation.objects.filter(user_id=request.user, property_id=property, status=CONFIRMED).exists()
+        has_reserved = Reservation.objects.filter(user_id=request.user, property_id=property, status__in=[ACTIVE,EARLY_OCCUPIED]).exists()
         
         comment = request.POST.get('comment')
         stars = request.POST.get('stars')
@@ -200,3 +219,22 @@ def thanks(request):
 
 def terms(request):
  return render(request,"properties/terms.html")
+
+
+def create_maintenance_request(request, property_id):
+    property = get_object_or_404(Property, id=property_id)
+    
+    if request.method == 'POST':
+        form = MaintenanceRequestForm(request.POST)
+        if form.is_valid():
+            maintenance_request = form.save(commit=False)
+            maintenance_request.property_id=property.id
+            maintenance_request.user_id=request.user.id
+
+            maintenance_request.save()
+            messages.success(request, 'Maintenance request submitted successfully!')
+            return redirect('properties:property_details',propertydetails_id=id)
+    else:
+        form = MaintenanceRequestForm()
+    return render(request, 'properties/maintenance_request.html', {'form': form,})
+

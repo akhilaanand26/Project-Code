@@ -1,7 +1,7 @@
 from django import forms
 
 from .models import Property,PropertyImages
-# from .models import MaintenanceRequestForm
+from .models import MaintenanceRequest
 
 class PropertyForm(forms.ModelForm):
     class Meta:
@@ -14,7 +14,7 @@ class PropertyImageForm(forms.ModelForm):
         fields = ('image',)   
         # ' video_file' 
 
-# class MaintenanceRequestForm(forms.ModelForm):
-#     class Meta:
-#         model = MaintenanceRequest
-#         fields = ['title', 'description']
+class MaintenanceRequestForm(forms.ModelForm):
+    class Meta:
+        model = MaintenanceRequest
+        fields = ['description']
