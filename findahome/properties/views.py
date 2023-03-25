@@ -1,24 +1,28 @@
 from django.shortcuts import render,redirect
 from django.contrib import messages
 from properties.models import Property
+from properties.models import PropertyImages,Reservation
 from .models import Wishlist
 from .forms import MaintenanceRequestForm
 import stripe
 from django.urls import reverse
 from .models import Reservation
 from .models import Comment
-from properties.constants import PENDING, CANCELLED, ACTIVE,EARLY_OCCUPIED
+from properties.constants import PENDING, CANCELLED, ACTIVE,EARLY_OCCUPIED,PAYMENT_PENDING
 from django.db.models import Q
 from django.shortcuts import get_object_or_404
 from django.http import JsonResponse
 from django.conf import settings
+from django.http import HttpResponse
 stripe.api_key = settings.STRIPE_PRIVATE_KEY
 
 
 
 
 def home(request):
-    latest_properties = Property.objects.all().filter(is_occupied=False).order_by('-created_at')
+    reservations = Reservation.objects.filter(status__in=[PENDING,PAYMENT_PENDING]).values_list('property_id', flat=True)
+    latest_properties = Property.objects.all().filter(is_occupied=False).exclude(id__in=reservations).order_by('-created_at')
+   
     if request.user.is_authenticated:
         for p in latest_properties:
             p.has_wishlisted = p.wishlist_set.filter(user_id=request.user).count() > 0
@@ -53,9 +57,10 @@ def search(request):
     current_no_of_bedrooms = request.GET.get('bedrooms')
     current_no_of_floors = request.GET.get('floors')
 
-
-    properties = Property.objects.filter(Q(title__icontains=query) | Q(city__icontains=query) | Q(district__name__icontains=query) | Q(address_1__icontains=query) | Q(zip_code__icontains=query)).exclude(is_occupied=True)
-    print(properties)
+    reservations = Reservation.objects.filter(status__in=[PENDING,PAYMENT_PENDING]).values_list('property_id', flat=True)
+    print(reservations)
+    properties = Property.objects.filter(Q(title__icontains=query) | Q(city__icontains=query) | Q(district__name__icontains=query) | Q(address_1__icontains=query) | Q(zip_code__icontains=query)).exclude(is_occupied=True).exclude(id__in=reservations)
+    
     if current_min_price:
         properties = properties.filter(rate__gte = current_min_price)
 
@@ -113,14 +118,18 @@ def property_details(request,propertydetails_id):
         has_reserved = False 
     reservation = None
     is_currentuser =None
-
+    is_pending=False
     try:
-        reservation = Reservation.objects.get(user_id=request.user.id, property_id=details.id, status=PENDING)
+        reservation = Reservation.objects.filter(user_id=request.user.id, property_id=details.id, status__in=[PENDING,PAYMENT_PENDING]).first()
         
-    except Reservation.DoesNotExist:
+        is_pending = Reservation.objects.filter(property_id=details.id, status__in=[PENDING,PAYMENT_PENDING]).first()
+        
+        
+    except Exception as e:
         # We have no object! Do nothing...
+        
         pass
-
+    
     try:
         is_currentuser = Reservation.objects.get(user_id=request.user.id, property_id=details.id, status=ACTIVE)
         
@@ -138,7 +147,7 @@ def property_details(request,propertydetails_id):
             avg_rating += comment.rating
     
         avg_rating = avg_rating / len(comments)
-    return render(request,'properties/property_details.html',{"property": details, "has_wishlisted": has_wishlisted,"has_reserved":has_reserved,"comments":comments,"avg_rating":avg_rating,"reservation":reservation,"is_currentuser":is_currentuser})
+    return render(request,'properties/property_details.html',{"property": details, "has_wishlisted": has_wishlisted,"has_reserved":has_reserved,"comments":comments,"avg_rating":avg_rating,"reservation":reservation,"is_currentuser":is_currentuser,"is_pending":is_pending})
 
 def property_reserve(request):
     id = request.POST.get('id')
@@ -196,16 +205,35 @@ def add_comment(request, id):
 
         return redirect('properties:property_details',propertydetails_id=id)
 
-def payment(request):
+def payment(request,property_id):
+    property=get_object_or_404(Property,id=property_id)
+    reservation=get_object_or_404(Reservation,property_id=property_id,user_id=request.user.id,status=PAYMENT_PENDING)
     stripe.api_key = settings.STRIPE_PRIVATE_KEY
     session = stripe.checkout.Session.create(
         payment_method_types=['card'],
-        line_items=[{
-            'price': 'price_1MixejSEWx5psR3yhdykXFyy',
-            'quantity': 1,
-        }],
+        # line_items=[{
+        #     'price': 'price_1MixejSEWx5psR3yhdykXFyy',
+        #     'quantity': 1,
+        # }],
+        line_items=[
+                {
+                    "price_data": {
+                        "currency": "inr",
+                        "unit_amount": int(property.rate)*100,
+                        "product_data": {
+                            "name": property.title,
+                            
+                            "images": [
+                           
+                            ],
+                        },
+                    },
+                    "quantity":1,
+                }
+            ],
+
         mode='payment',
-        success_url=request.build_absolute_uri(reverse('thanks'))+'?session_id = {CHECKOUT_SESSION_ID}',
+        success_url=request.build_absolute_uri(reverse('thanks', kwargs={'reservation_id':reservation.id}))+'?session_id = {CHECKOUT_SESSION_ID}',
         cancel_url=request.build_absolute_uri(reverse('properties:home')),
     )
     context = {
@@ -214,11 +242,17 @@ def payment(request):
     }
     return render(request, 'properties/payment.html', context)
 
-def thanks(request):
- return render(request,"properties/thanks.html")
+def thanks(request,reservation_id):
+    reservation =get_object_or_404(Reservation,id=reservation_id)
+    property =get_object_or_404(Property,id=reservation.property_id.id)
+    reservation.status=ACTIVE
+    property.is_occupied = True
+    reservation.save()
+    property.save()
+    return render(request,"properties/thanks.html")
 
-def terms(request):
- return render(request,"properties/terms.html")
+def terms(request,property_id):
+ return render(request,"properties/terms.html",{"property_id":property_id})
 
 
 def create_maintenance_request(request, property_id):
@@ -228,13 +262,31 @@ def create_maintenance_request(request, property_id):
         form = MaintenanceRequestForm(request.POST)
         if form.is_valid():
             maintenance_request = form.save(commit=False)
-            maintenance_request.property_id=property.id
-            maintenance_request.user_id=request.user.id
+            maintenance_request.property_id=property
+            maintenance_request.user_id=request.user
 
             maintenance_request.save()
             messages.success(request, 'Maintenance request submitted successfully!')
-            return redirect('properties:property_details',propertydetails_id=id)
+            return redirect('properties:property_details',propertydetails_id=property.id)
     else:
         form = MaintenanceRequestForm()
     return render(request, 'properties/maintenance_request.html', {'form': form,})
+
+
+
+
+
+
+def show_video(request, property_id):
+    property_images = Property.objects.filter(id=property_id)
+    if property_images.exists():
+        video_file = property_images.first().video_file
+        video_url = video_file.url
+        return HttpResponse(f'<video controls src="{video_url}" ></video>')
+    else:
+        return HttpResponse('Video not found')
+
+
+
+
 

@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+
+{% block content %}
+  <h1>{{ property_image.property_id.title }}</h1>
+  <video width="640" height="480" controls>
+    <source src="{{ property_image.video_file.url }}" type="video/mp4">
+  </video>
+{% endblock %}
+{% comment %} 
+{% extends 'base.html' %}
+
+{% block content %}
+  <video width="640" height="360" controls>
+    <source src="{{ property_video.video_file.url }}" type="video/mp4">
+    Your browser does not support the video tag.
+  </video>
+{% endblock %} {% endcomment %}

@@ -33,7 +33,7 @@ urlpatterns = [
     path("change-password/<token>/",ChangePassword,name="change-password"),
     path("forgetpswd/",forgetpswd, name="forgetpswd"),   
     path("owner/",include('owner.urls')),   
-    path('thanks/', views.thanks, name='thanks'),
+    path('thanks/<int:reservation_id>/', views.thanks, name='thanks'),
 
 ]
 

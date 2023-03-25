@@ -3,8 +3,9 @@ from django.core.validators import MaxValueValidator, MinValueValidator, RegexVa
 from django.utils import timezone
 from django.urls import reverse
 from users.models import User
-from .constants import PENDING, CANCELLED, EARLY_OCCUPIED,ACTIVE
-# from django.core.validators import FileExtensionValidator
+from .constants import PENDING, CANCELLED, EARLY_OCCUPIED,ACTIVE,PAYMENT_PENDING
+from django.core.validators import FileExtensionValidator
+#from location_field.models.plain import PlainLocationField
 
 
 class District(models.Model):
@@ -47,14 +48,17 @@ class Property(models.Model):
     city = models.CharField(max_length=100)
     district = models.ForeignKey(District, on_delete=models.SET_NULL, null=True)
     zip_code = models.CharField(max_length=6, validators=[RegexValidator(regex='^[0-9]{6}$', message='Invalid Zip Code')])
+    video_file = models.FileField(upload_to='properties/',validators=[FileExtensionValidator(['mp4', 'avi'])])
+    
 
     owner = models.ForeignKey(User, on_delete=models.CASCADE)
-    
+    # location = PlainLocationField(based_fields=['city'], zoom=7)
 
     is_occupied = models.BooleanField(default=False)
 
     created_at = models.DateTimeField(default=timezone.now) # can be edited/updated manually
     updated_at = models.DateTimeField(auto_now=True)
+
 
     def get_absolute_url(self):
         return reverse('properties:detail', args=[self.id])
@@ -70,14 +74,14 @@ class Property(models.Model):
 class PropertyImages(models.Model):
     property_id = models.ForeignKey(Property, on_delete=models.CASCADE)
     image = models.ImageField(upload_to='properties/')
-    # video_file = models.FileField(upload_to='properties/',validators=[FileExtensionValidator(['mp4', 'avi'])])
+
 
     def __str__(self):
         return self.property_id.title
     
-    class Meta:
-        verbose_name = 'propertyimage'
-        verbose_name_plural = 'Property Images'
+    # class Meta:
+    #     verbose_name = 'propertyimage'
+    #     verbose_name_plural = 'Property Images'
 
 class Wishlist(models.Model):
     user_id = models.ForeignKey(User, on_delete=models.CASCADE)
@@ -100,7 +104,8 @@ class Reservation(models.Model):
         (PENDING, "Pending"),
         (CANCELLED, "Cancelled"),
         (EARLY_OCCUPIED,"Early Occupied"),
-        (ACTIVE,"Active")
+        (ACTIVE,"Active"),
+        (PAYMENT_PENDING,"Payment Pending"),
     ]
 
     user_id = models.ForeignKey(User, on_delete=models.CASCADE)

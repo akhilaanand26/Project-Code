@@ -171,6 +171,24 @@
                 </div>
             </div>
 
+            <div class="video-form">
+                <h3 class=" video-form font-semibold text-gray-900 text-lg mt-4 mb-2">Property Videos</h3>
+                
+
+                <div class="video_file  {% if form.video_file.errors %}error{% endif %}">
+                    <label for="{{ form.video_file.id_for_label }}">{{ form.video_file.label }}</label>
+                    {{ form.video_file }}
+                    
+                    {{ form.video_file.errors }}
+                </div>
+
+            </div> 
+
+          
+                
+              
+            
+
             <div class="images-form flex flex-col mb-4 gap-y-3 items-start">
                 <h3 class="font-semibold text-gray-900 text-lg mt-4 mb-2">Property Images</h3>
 
@@ -188,12 +206,12 @@
 
             <div id="common-error" class="text-sm mt-4 mb-2 text-red-500">
             </div>
-            <div class="form-group image {% if image_form.image.errors %}error{% endif %}">
+            {% comment %} <div class="form-group image {% if image_form.image.errors %}error{% endif %}">
                 <label for="{{ image_form.image.id_for_label }}">{{ image_form.image.label }}</label>
                 {{ image_form.image }}
                 
                 {{ image_form.image.errors }}
-            </div>
+            </div> {% endcomment %}
 
             <button type="submit" class="btn btn-primary w-full font-bold mt-8 mb-4">Update Property</button>
         </form>
@@ -222,6 +240,28 @@
             form.insertBefore(newForm, addButton) //Insert the new form at the end of the list of forms
 
             totalForms.setAttribute('value', `${formNum+1}`) //Increment the number of total forms in the management form
-        }
+        {% comment %} }function deleteVideo() {
+            const checkbox = document.getElementById("delete-video-checkbox");
+            if (checkbox.checked) {
+              // Code to delete the video goes here
+              console.log("Video deleted!"); // For example, this could be a message displayed to the user
+            } else {
+              console.log("Please check the box to confirm deletion."); // Or a message telling the user to confirm deletion
+            }
+          } 
+          // Get the checkbox element
+const checkbox = document.getElementById('delete-video-checkbox');
+
+// Add an event listener to the checkbox
+checkbox.addEventListener('change', function() {
+  // Check if the checkbox is checked
+  if (this.checked) {
+    // Checkbox is checked, do something
+    console.log('Checkbox is checked');
+  } else {
+    // Checkbox is not checked, do something else
+    console.log('Checkbox is not checked');
+  }
+}); {% endcomment %}
     </script>
 {% endblock %}

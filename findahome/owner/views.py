@@ -2,13 +2,14 @@ from django.shortcuts import render,redirect
 from django.contrib import messages
 from properties.forms import PropertyForm,PropertyImageForm
 from properties.models import Property,PropertyImages,Reservation
-from properties.constants import PENDING, CANCELLED, ACTIVE,EARLY_OCCUPIED
+from properties.constants import PENDING, CANCELLED, ACTIVE,EARLY_OCCUPIED,PAYMENT_PENDING
 from django.shortcuts import get_object_or_404
 from django.forms import modelformset_factory
 from properties.models import MaintenanceRequest
+import os
 # from .forms import MaintenanceRequestForm
-import googlemaps
-API_KEY = 'AIzaSyAtDBI_DGeh1WZEejPVXosbD1NL1KqLNOo'
+# import googlemaps
+# API_KEY = 'AIzaSyAtDBI_DGeh1WZEejPVXosbD1NL1KqLNOo'
 
 
 def properties_views(request):
@@ -21,8 +22,10 @@ def add_property(request):
     ImageFormset = modelformset_factory(PropertyImages, fields=('image',), extra=2)
 
     if request.method == "POST":
-        form = PropertyForm(request.POST)
+        form = PropertyForm(request.POST,request.FILES)
+        #video_form = PropertyForm(request.POST, request.FILES)
         formset = ImageFormset(request.POST, request.FILES, queryset=PropertyImages.objects.none())
+        
 
         # do form validation for each field
         if form.is_valid() and formset.is_valid():
@@ -31,6 +34,12 @@ def add_property(request):
             obj = form.save(commit=False)
             obj.owner = request.user
             obj.save()
+
+            # video = video_form.save(commit=False)
+            # video.property_id=obj
+            # video.save()
+
+           
 
             # saving each image
             for f in formset:
@@ -46,6 +55,8 @@ def add_property(request):
     else:
         form = PropertyForm()
         formset = ImageFormset(queryset=PropertyImages.objects.none())
+        # video_form = PropertyImageForm()
+      
     return render(request, 'owner/add_property.html', {"form": form, 'formset': formset})
 
     # if request.method == "POST":
@@ -72,16 +83,47 @@ def add_property(request):
 
 def update_property(request, property_id):
     p = get_object_or_404(Property, id=property_id, owner=request.user)
-
+    
     ImageFormset = modelformset_factory(PropertyImages, fields=('image',), extra=2, can_delete=True)
+    #ImageFormset = modelformset_factory(PropertyImages, form=PropertyImageForm, fields=('image',), extra=2, can_delete=True)
 
     if request.method == "POST":
-        form = PropertyForm(request.POST, instance=p)
+        form = PropertyForm(request.POST,request.FILES,instance=p)
         formset = ImageFormset(request.POST, request.FILES, queryset=PropertyImages.objects.filter(property_id=p.id))
+       
+  
 
         # do form validation for each field
-        if form.is_valid() and formset.is_valid():
+        if form.is_valid() and formset.is_valid():   # and video_form.is_valid()
             form.save()
+
+
+
+            # if 'delete_video' in request.POST:
+            #     if p_video:
+            #       os.remove(p_video.video_file.path)
+            #       p_video.delete()
+            #     image_form.instance.video_file = None
+            # elif 'video_file' in request.FILES:
+            #     if p_video:
+            #       os.remove(p_video.video_file.path)
+            #     image_form.save()
+            # else:
+            #   image_form.save(commit=False)
+            #   image_form.video_file = p_video.video_file
+            #   image_form.save()
+#Check if the video file has changed
+            # if 'video_file' in request.FILES:
+            #     # Delete the old video file
+            #     if p_video:
+            #         os.remove(p_video.video_file.path)
+            #     # Save the new video file
+            #     image_form.save()
+            # else:
+            #     image_form.save(commit=False)
+            #     image_form.video_file = p_video.video_file
+            #     image_form.save()
+            
         
             # this will give you all forms marked as DELETE
             forms_to_delete = formset.deleted_forms
@@ -109,7 +151,8 @@ def update_property(request, property_id):
     else:
         form = PropertyForm(instance=p)
         formset = ImageFormset(queryset=PropertyImages.objects.filter(property_id=p.id))
-    return render(request, 'owner/update_property.html', {"form": form, 'formset': formset})
+       
+    return render(request, 'owner/update_property.html', {"form": form, 'formset': formset})    #,'video_form':video_form
 
     # p = get_object_or_404(Property, id=property_id, owner=request.user)
     # p_image = PropertyImages.objects.filter(property_id=p.id).first()
@@ -157,10 +200,9 @@ def accept_request(request, request_id):
        
         Reservation.objects.filter(property_id=property.id, status=PENDING).exclude(id=r.id).update(status=CANCELLED)
 
-        r.status = ACTIVE
-        property.is_occupied = True
+        r.status =PAYMENT_PENDING
         r.save()
-        property.save()
+        
        
         messages.success(request, "Reservation request for that property has been confirmed successfully")
         return redirect('owner:request')
@@ -187,26 +229,26 @@ def other_request(request):
        
     return render(request, 'owner/request_history.html',{"reservations":reservations})
 
-def rental_map(request):
-    gmaps = googlemaps.Client(key=API_KEY)
-    # Do something with the Google Maps client, e.g. retrieve the owner's rental properties
-    return render(request, 'owner/map.html', context)
+# def rental_map(request):
+#     gmaps = googlemaps.Client(key=API_KEY)
+#     # Do something with the Google Maps client, e.g. retrieve the owner's rental properties
+#     return render(request, 'owner/map.html', context)
 
-def rental_map(request):
-    gmaps = googlemaps.Client(key=API_KEY)
-    properties = get_owner_properties(request.user)
-    markers = []
-    for property in properties:
-        location = gmaps.geocode(property.address)[0]['geometry']['location']
-        markers.append({
-            'lat': location['lat'],
-            'lng': location['lng'],
-            'title': property.name,
-        })
-    context = {
-        'markers': markers,
-    }
-    return render(request, 'owner/map.html', context)
+# def rental_map(request):
+#     gmaps = googlemaps.Client(key=API_KEY)
+#     properties = get_owner_properties(request.user)
+#     markers = []
+#     for property in properties:
+#         location = gmaps.geocode(property.address)[0]['geometry']['location']
+#         markers.append({
+#             'lat': location['lat'],
+#             'lng': location['lng'],
+#             'title': property.name,
+#         })
+#     context = {
+#         'markers': markers,
+#     }
+#     return render(request, 'owner/map.html', context)
 
 def view_maintenance_requests(request):
     properties = Property.objects.filter(owner=request.user.id)

@@ -26,7 +26,12 @@
                         <th scope="col" class="text-sm font-medium text-white px-6 py-4">
                           District
                         </th>
-                        
+                        <th scope="col" class="text-sm font-medium text-white px-6 py-4">
+                          Rate
+                        </th>
+                        <th scope="col" class="text-sm font-medium text-white px-6 py-4">
+                          Status
+                         </th>
                           <th scope="col" class="text-sm font-medium text-white px-6 py-4">
                            Action
                           </th>
@@ -45,22 +50,38 @@
                             {% endif %}
                         </td>
                           
-                          <td class="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">
-                            {{reservation.property_id.title}}
+                          <td class="text-sm text-gray-900 font-medium px-6 py-4 whitespace-nowrap">
+                            <a href="{% url 'properties:property_details' propertydetails_id=reservation.property_id.id%}">
+                            {{reservation.property_id.title}}</a>
                           </td>
-                          <td class="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">
+                          <td class="text-sm text-gray-900 font-medium px-6 py-4 whitespace-nowrap">
                             {{reservation.property_id.city}}
                           
                             </td>
-                            <td class="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">
+                            <td class="text-sm text-gray-900 font-medium px-6 py-4 whitespace-nowrap">
                               {{reservation.property_id.district}}
                             </td>
-                           
+                          </td>
+                          <td class="text-sm text-gray-900 font-medium px-6 py-4 whitespace-nowrap">
+                            {{reservation.property_id.rate}}
+                          </td>
+                          <td class="text-sm text-gray-900 font-medium px-6 py-4 whitespace-nowrap">
+                            {{reservation.status}}
+                          </td>
                           <td class="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">
-                              <a href="{% url 'properties:terms' %}" >
-                              <button class="bg-blue-500 hover:bg-blue-400 text-white font-bold py-2 px-4 border-b-4 border-blue-700 hover:border-blue-500 rounded">
-                               Proceed To Pay
-                              </button></a>
+                           {% if reservation.status == "PAYMENT_PENDING" %}
+                           <a href="{% url 'properties:terms' property_id=reservation.property_id.id %}" >
+                            <button class="bg-blue-500 hover:bg-blue-400 text-white font-bold py-2 px-4 border-b-4 border-blue-700 hover:border-blue-500 rounded">
+                             Proceed To Pay
+                            </button></a>
+                           {% endif %}
+                           {% if reservation.status == "ACTIVE" or reservation.status == "EARLY_OCCUPIED" %}
+                           <a href="" >
+                            <button class="bg-green-500 hover:bg-green-400 text-white font-bold py-2 px-4 border-b-4 border-green-700 hover:border-green-500 rounded">
+                            View Receipt
+                            </button></a>
+                           {% endif %}
+                           
                              
                               {% comment %} <a href="{% url 'owner:delete_property' property_id=property.id %}" class=" btn btn-danger">Delete</a>     {% endcomment %}
                           </td>

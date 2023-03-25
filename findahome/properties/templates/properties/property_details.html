@@ -111,6 +111,16 @@
       
        
      {% endcomment %} 
+     {% comment %} <button class="px-2 py-1 rounded text-sm bg-blue-500 text-white hover:bg-blue-600">
+        Show Video
+      </button> {% endcomment %}
+      {% comment %} {% if property.propertyimages_set.exists %}
+      <a href="{% url 'properties:show_video' property_id=property.id %}" class="px-2 py-1 rounded text-sm bg-blue-500 text-white hover:bg-blue-600">View Video</a>
+    {% endif %} {% endcomment %}
+    {% if property.video_file %}
+    <a href="{% url 'properties:show_video' property_id=property.id %}" class="px-2 py-1 rounded text-sm bg-blue-500 text-white hover:bg-blue-600">View Video</a>
+    
+{% endif %}
     <div class="extra-infos  mt-6">
         <div class="left">
             <h1 class="text-3xl font-bold">{{ property.title }}</h1>
@@ -459,7 +469,7 @@
 <section>
         <div style="width: 30%;" class="right bg-white shadow-lg flex items-center justify-between gap-x-4 h-max p-4 rounded">
             {% if user.is_authenticated %}
-            {% if property.is_occupied %}
+            {% if property.is_occupied or is_pending and not reservation %}
             <div class="message bg-red-100 border w-full border-red-600 text-red-600 p-2 rounded text-center">
                 Property not available for booking
             </div>

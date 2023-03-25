@@ -28,20 +28,46 @@
               <input type="checkbox" id="termsCheckbox" class="form-checkbox h-5 w-5 text-blue-600" required>
               <span class="ml-2 text-gray-700">I agree to the terms and conditions</span>
             </label>
-            <button type="submit" id="submitButton" class="mt-4 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" disabled>
+            <button>
+              <a href="{% url 'properties:payment' property_id=property_id %}" id="submitButton" class="bg-blue-500 hover:bg-blue-400 text-white font-bold py-2 px-4 border-b-4 border-blue-700 hover:border-blue-500 rounded" disabled>
+                  Pay
+              </a>
+          </button>
+            {% comment %} <button><a href="{% url 'properties:payment' %}" type="submit" id="submitButton" class="bg-blue-500 hover:bg-blue-400 text-white font-bold py-2 px-4 border-b-4 border-blue-700 hover:border-blue-500 rounded" disabled>
                 Pay
-            </button>
-          </form>
+            </a></button>
+          </form> {% endcomment %}
       
-        {% comment %} <button class="bg-blue-500 hover:bg-blue-400 text-white font-bold py-2 px-4 border-b-4 border-blue-700 hover:border-blue-500 rounded">
+        {% comment %} class="mt-4 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"<button class="bg-blue-500 hover:bg-blue-400 text-white font-bold py-2 px-4 border-b-4 border-blue-700 hover:border-blue-500 rounded">
          Pay
-        </button></a> {% endcomment %}
+        </a> {% endcomment %}
     </div>
   </div>
 </div>
 {% endblock %}
 {% block script %}
+
 <script>
+    const termsCheckbox = document.getElementById('termsCheckbox');
+    const submitButton = document.getElementById('submitButton');
+    
+    termsCheckbox.addEventListener('change', function() {
+      if (termsCheckbox.checked) {
+        submitButton.removeAttribute('disabled');
+      } else {
+        submitButton.setAttribute('disabled', '');
+      }
+    });
+    
+    submitButton.addEventListener('click', function(event) {
+        event.preventDefault();
+        if (termsCheckbox.checked) {
+            window.location.href = submitButton.getAttribute('href');
+        }
+    });
+</script>
+
+{% comment %} <script>
     const termsCheckbox = document.getElementById('termsCheckbox');
     const submitButton = document.getElementById('submitButton');
     
@@ -59,15 +85,6 @@
       window.location.href = 'properties/payment';
     });
   </script>
+ {% endcomment %}
 
-{% comment %} <script>
-const checkbox = document.getElementById('myCheckbox');
-if (checkbox.checked==True) {
-  // Do something if the checkbox is checked
-  <a href="{% url 'properties:payment' %}" ></a>
-} else {
-  // Do something else if the checkbox is not checked
-  <a href="{% url 'properties:terms' %}" ></a>
-}
-</script> {% endcomment %}
 {% endblock %}

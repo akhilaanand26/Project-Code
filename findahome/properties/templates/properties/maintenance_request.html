@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Find your sweet home{% endblock %}
+{% block content %}
+<form method="POST" > 
+    {% csrf_token %}
+{{form}}
+<button type="submit" >SEND MESSAGE</button>
+
+</form>
+
+
+{% endblock %}
+
+
