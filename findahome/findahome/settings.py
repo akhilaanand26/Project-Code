@@ -46,6 +46,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'location_field.apps.DefaultConfig',
+     
     
 ]
 
@@ -173,3 +174,14 @@ GOOGLE_API_KEY = "AIzaSyAtDBI_DGeh1WZEejPVXosbD1NL1KqLNOo"
 RECAPTCHA_PUBLIC_KEY = "6Lczb_wkAAAAAOzEVuXsaYDLkIofblhAeuZfdpmD"
 
 RECAPTCHA_PRIVATE_KEY = "6Lczb_wkAAAAAMgc45xi06M6SeCp-1fahvQOmM5A"
+
+
+LOCATION_FIELD = {
+    'map.provider': 'google',
+    'search.provider': 'google',
+    'provider.google.api': '//maps.google.com/maps/api/js?sensor=false',
+    'provider.google.api_key': 'AIzaSyAtDBI_DGeh1WZEejPVXosbD1NL1KqLNOo',
+    'provider.google.api_libraries': 'AIzaSyAtDBI_DGeh1WZEejPVXosbD1NL1KqLNOo',
+    'provider.google.map.type': 'ROADMAP',
+}
+

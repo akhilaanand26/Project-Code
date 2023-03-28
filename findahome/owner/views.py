@@ -256,8 +256,8 @@ def view_maintenance_requests(request):
     maintenance_requests = MaintenanceRequest.objects.filter(property_id__in=properties)
     return render(request, 'owner/view_maintenancerequest.html', {'maintenance_requests': maintenance_requests})
 
-
-
+def price_prediction(request):
+ return render(request, 'owner/price_prediction.html')
 
 
 

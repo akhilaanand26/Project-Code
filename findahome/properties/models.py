@@ -5,7 +5,7 @@ from django.urls import reverse
 from users.models import User
 from .constants import PENDING, CANCELLED, EARLY_OCCUPIED,ACTIVE,PAYMENT_PENDING
 from django.core.validators import FileExtensionValidator
-#from location_field.models.plain import PlainLocationField
+from location_field.models.plain import PlainLocationField
 
 
 class District(models.Model):
@@ -52,7 +52,7 @@ class Property(models.Model):
     
 
     owner = models.ForeignKey(User, on_delete=models.CASCADE)
-    # location = PlainLocationField(based_fields=['city'], zoom=7)
+    location = PlainLocationField(based_fields=['city'], zoom=7,null=True,blank=True,default='')
 
     is_occupied = models.BooleanField(default=False)
 

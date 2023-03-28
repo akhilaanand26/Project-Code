@@ -14,7 +14,7 @@ class PropertyAdmin(admin.ModelAdmin):
 
     fieldsets = (
         (None, { 'fields': ('title', 'description', 'owner', 'is_occupied', ) }),
-        ('Address', { 'fields': ('address_1', 'city', 'district', 'zip_code') }),
+        ('Address', { 'fields': ('address_1', 'city', 'district', 'zip_code','location',) }),
         ('Other Info', { 'fields': ('no_of_floors',   'plot_area', 'rate', 'has_watersupply', 'has_electricity',
         'no_of_bathrooms_inside','no_of_bathrooms_outside','no_of_bedrooms','master_bedroon','no_of_livingrooms','kitchen','dining_hall','feature_1','feature_2',) }),
         #('Property Images',{ 'fields': ('Image',)}),

@@ -7,6 +7,8 @@
     <!-- additional lightbox js & css tags + code import -->
     <link rel="stylesheet" type="text/css" href="{% static 'css/lightbox.min.css' %}">
     <script type="text/javascript" src="{% static 'js/lightbox-plus-jquery.min.js' %}"></script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAtDBI_DGeh1WZEejPVXosbD1NL1KqLNOo"></script>
+
 {% endblock %}  
 
 {% block content %}
@@ -298,6 +300,7 @@
                 <p>
                     {{ property.description }}
                 </p>
+                <div id="map" style="width:500px ; height:500px;"></div>
                 <h3 class="text-xl font-semibold mb-1">Available</h3>
                 <span>{%if property.is_occupied%}Yes{% else%}No{%endif%}
                 </span>
@@ -581,5 +584,17 @@
         })
         
     }
+
 </script>
+<script>
+    function initMap() {
+        var mapOptions = {
+            center: {lat: 37.7749, lng: -122.4194},
+            zoom: 8
+        };
+        var map = new google.maps.Map(document.getElementById('map'), mapOptions);
+    }
+</script>
+<script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAtDBI_DGeh1WZEejPVXosbD1NL1KqLNOo&callback=initMap"></script>
+
 {%endblock%}

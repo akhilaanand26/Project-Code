@@ -3,8 +3,9 @@
 
 {% block title %}Find your sweet home{% endblock %}
 
-{% block tags %}{% endblock %}
-
+{% block tags %}
+<script src="https://code.jquery.com/jquery-3.6.4.min.js" integrity="sha256-oP6HI9z1XaZNBrJURtCoUT5SUnxFr8s3BzRl+cbzUq8=" crossorigin="anonymous"></script>{{form.media}}
+{% endblock %}
 {% block content %}
     <div class="properties-page">
         <h1 class="text-2xl font-bold mb-6">Update Property</h1>
@@ -28,6 +29,14 @@
                 {{ form.description.errors }}
             </div>
 
+            <div class="form-group description {% if form.description.errors %}error{% endif %}">
+                <label for="{{ form.location.id_for_label }}">
+                    {{ form.location.label }}
+                </label>
+                {{ form.location }}
+                
+                {{ form.location.errors }}
+            </div>
             <div class="other-attributes mb-4">
                 <h3 class="font-semibold text-gray-900 text-lg mt-4 mb-2">Other Attributes</h3>
 
