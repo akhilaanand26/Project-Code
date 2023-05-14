@@ -155,33 +155,3 @@ AUTHENTICATION_BACKENDS = [
 
 NPM_BIN_PATH = "C:/Program Files/nodejs/npm.cmd"
 
-EMAIL_USE_TLS = True
-EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_HOST = 'smtp.gmail.com'
-
-EMAIL_PORT = 587
-EMAIL_HOST_USER = 'akhilaanand095@gmail.com'
-EMAIL_HOST_PASSWORD = 'wtpudqlsuosuhofd'
-
-LOGIN_REDIRECT_URL = 'properties:home' 
-LOGIN_URL = 'login'
-
-STRIPE_PUBLIC_KEY = 'pk_test_51MgmWTSEWx5psR3yiVlYshTXBtV6jrdAf7GCdIFqUXPThFaNbdDF9aHZ4nqDFndPUsG68ob51b46gpH3od4nI9ND00N1k2iOFn'
-
-STRIPE_PRIVATE_KEY = 'sk_test_51MgmWTSEWx5psR3ywRKGXeFDsM8HOvLyqyFZ1hHQqlWLsJO8F5cjSBmnbi5AS0BmsvEbKMamKdq1OIveaScfuYYO00Hddh9gB4'
-GOOGLE_API_KEY = "AIzaSyAtDBI_DGeh1WZEejPVXosbD1NL1KqLNOo"
-
-RECAPTCHA_PUBLIC_KEY = "6Lczb_wkAAAAAOzEVuXsaYDLkIofblhAeuZfdpmD"
-
-RECAPTCHA_PRIVATE_KEY = "6Lczb_wkAAAAAMgc45xi06M6SeCp-1fahvQOmM5A"
-
-
-LOCATION_FIELD = {
-    'map.provider': 'google',
-    'search.provider': 'google',
-    'provider.google.api': '//maps.google.com/maps/api/js?sensor=false',
-    'provider.google.api_key': 'AIzaSyAtDBI_DGeh1WZEejPVXosbD1NL1KqLNOo',
-    'provider.google.api_libraries': 'AIzaSyAtDBI_DGeh1WZEejPVXosbD1NL1KqLNOo',
-    'provider.google.map.type': 'ROADMAP',
-}
-
